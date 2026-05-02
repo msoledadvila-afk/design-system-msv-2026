@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design System — María Soledad Vila · v1.0</title>
+<meta name="description" content="Design system unificado para Portfolio personal (Vibe Coder) y Talento Impulsa Consulting. Tokens, tipografía, componentes y prompts para IAs.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Outfit:wght@300;400;500;600;700;800&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<style>
+  *,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+
+  /* === TOKENS COMPARTIDOS === */
+  :root {
+    --text-xs:.75rem; --text-sm:.875rem; --text-base:1rem; --text-md:1.125rem;
+    --text-lg:1.25rem; --text-xl:1.5rem; --text-2xl:1.875rem; --text-3xl:2.25rem;
+    --text-4xl:3rem; --text-5xl:3.75rem; --text-6xl:4.5rem;
+    --space-1:.25rem; --space-2:.5rem; --space-3:.75rem; --space-4:1rem;
+    --space-5:1.25rem; --space-6:1.5rem; --space-8:2rem; --space-10:2.5rem;
+    --space-12:3rem; --space-16:4rem; --space-20:5rem; --space-24:6rem;
+    --tracking-tighter:-.04em; --tracking-tight:-.02em; --tracking-widest:.18em;
+
+    /* Shell colors (chrome de la app, fijo) */
+    --shell-bg:#FAFAF8;
+    --shell-surface:#FFFFFF;
+    --shell-text:#1A1A1A;
+    --shell-text-dim:#6B6B6B;
+    --shell-border:#E5E2DD;
+    --shell-accent:#2C2A2E;
+  }
+
+  /* === SUB-MARCA: PORTFOLIO === */
+  [data-brand="portfolio"] {
+    --brand:        #C4907C;
+    --brand-soft:   #D4A797;
+    --brand-deep:   #A87464;
+    --brand-glow:   rgba(196,144,124,.12);
+    --bg:           #F5F2F0;
+    --bg-alt:       #EAE5E1;
+    --bg-card:      #FFFFFF;
+    --border:       #DDD7D2;
+    --border-light: #E8E3DF;
+    --text:         #2C2A2E;
+    --text-dim:     #7A7580;
+    --grey-dark:    #4A464F;
+    --accent-sage:     #ABB7A3;
+    --accent-lavender: #A48997;
+    --accent-navy:     #1E2A47;
+    --accent-sand:     #DAD2BB;
+    --font-display: 'Syne', sans-serif;
+    --font-body:    'Outfit', sans-serif;
+    --shadow-md: 0 8px 24px rgba(196,144,124,.12);
+    --shadow-lg: 0 12px 32px rgba(196,144,124,.15);
+    --radius: 1rem;
+  }
+
+  /* === SUB-MARCA: TALENTO === */
+  [data-brand="talento"] {
+    --brand:        #9A7B3D;
+    --brand-soft:   #B8995A;
+    --brand-deep:   #75582A;
+    --bg:           #EFE9DB;
+    --bg-alt:       #DDD8D4;
+    --bg-warm:      #E3D7D2;
+    --bg-card:      #FFFFFF;
+    --border:       #C8C0B5;
+    --border-light: #DDD8D4;
+    --text:         #1A1814;
+    --text-dim:     #6E6859;
+    --grey-dark:    #1A1814;
+    --earth-1:#E3D7D2; --earth-2:#BFABA2; --earth-3:#8C7D7A;
+    --earth-4:#684B45; --earth-5:#3B3935;
+    --dark-bg:#0A0A0A; --dark-teal:#1F4A52; --dark-gold:#D4B062;
+    --font-display:    'Outfit', sans-serif;
+    --font-body:       'Outfit', sans-serif;
+    --font-decorative: 'Cormorant Garamond', serif;
+    --shadow-md: 0 8px 20px rgba(26,24,20,.08);
+    --shadow-lg: 0 16px 32px rgba(26,24,20,.10);
+    --radius: .5rem;
+  }
+
+  /* === SHELL (la app del design system, NO de las marcas) === */
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--shell-bg);
+    color: var(--shell-text);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .app-header {
+    position:sticky; top:0; z-index:100;
+    background: rgba(250,250,248,.92);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--shell-border);
+    padding: var(--space-4) var(--space-8);
+    display:flex; justify-content:space-between; align-items:center; gap:var(--space-6);
+    flex-wrap:wrap;
+  }
+  .app-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight:800;
+    font-size:var(--text-md);
+    letter-spacing:var(--tracking-tight);
+  }
+  .app-logo span { color:#C4907C; }
+  .app-version { font-size:var(--text-xs); color:var(--shell-text-dim); margin-left:var(--space-2); }
+
+  /* Brand switcher */
+  .brand-switcher { display:flex; gap:0; border:1px solid var(--shell-border); border-radius:9999px; padding:4px; background:var(--shell-surface); }
+  .brand-switcher button {
+    padding: var(--space-2) var(--space-5);
+    border:none; background:transparent; cursor:pointer;
+    font-family:'Outfit',sans-serif; font-size:var(--text-sm); font-weight:500;
+    color:var(--shell-text-dim); border-radius:9999px;
+    transition:all .25s ease;
+  }
+  .brand-switcher button.active { background:var(--shell-accent); color:#fff; }
+  .brand-switcher button:not(.active):hover { color:var(--shell-text); }
+
+  /* Side nav */
+  .layout { display:grid; grid-template-columns: 240px 1fr; min-height:calc(100vh - 65px); }
+  .side-nav { border-right:1px solid var(--shell-border); padding:var(--space-6) var(--space-4); position:sticky; top:65px; height:calc(100vh - 65px); overflow-y:auto; }
+  .side-nav h4 { font-size:var(--text-xs); text-transform:uppercase; letter-spacing:var(--tracking-widest); color:var(--shell-text-dim); margin: var(--space-6) var(--space-2) var(--space-2); font-weight:600; }
+  .side-nav h4:first-child { margin-top:0; }
+  .side-nav a { display:block; padding: var(--space-2) var(--space-3); color:var(--shell-text-dim); text-decoration:none; font-size:var(--text-sm); border-radius:6px; transition:all .15s; }
+  .side-nav a:hover { background:#F0EEEA; color:var(--shell-text); }
+  .side-nav a.active { background:var(--shell-accent); color:#fff; }
+
+  .main { padding: var(--space-12) var(--space-12); max-width:1200px; }
+  @media (max-width:900px) {
+    .layout { grid-template-columns:1fr; }
+    .side-nav { position:static; height:auto; border-right:none; border-bottom:1px solid var(--shell-border); display:flex; gap:var(--space-2); overflow-x:auto; padding:var(--space-3); }
+    .side-nav h4 { display:none; }
+    .side-nav a { white-space:nowrap; }
+    .main { padding: var(--space-8) var(--space-5); }
+  }
+
+  /* Headings dentro del shell */
+  .section-title {
+    font-family:'Syne', sans-serif;
+    font-size:var(--text-3xl);
+    font-weight:800;
+    letter-spacing:var(--tracking-tight);
+    margin-bottom:var(--space-2);
+  }
+  .section-lead { color:var(--shell-text-dim); font-size:var(--text-md); margin-bottom:var(--space-10); max-width:65ch; }
+  .eyebrow {
+    font-size:var(--text-xs); text-transform:uppercase; letter-spacing:var(--tracking-widest);
+    color:var(--shell-text-dim); font-weight:600; margin-bottom:var(--space-3);
+  }
+  section { margin-bottom: var(--space-20); scroll-margin-top:80px; }
+  section h3 {
+    font-family:'Syne',sans-serif; font-weight:700; font-size:var(--text-xl);
+    margin-bottom:var(--space-2); margin-top:var(--space-10);
+  }
+  section p { color:var(--shell-text-dim); margin-bottom:var(--space-4); }
+
+  /* === DEMO SURFACE: el espacio donde se muestra la marca activa === */
+  .demo {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    border:1px solid var(--shell-border);
+    border-radius:12px;
+    padding: var(--space-12) var(--space-8);
+    margin: var(--space-4) 0;
+    transition: background .35s ease, color .35s ease;
+  }
+  .demo-label {
+    font-size:var(--text-xs);
+    color:var(--shell-text-dim);
+    margin-bottom:var(--space-3);
+    display:flex; align-items:center; gap:var(--space-2);
+  }
+  .demo-label::before { content:""; width:8px; height:8px; border-radius:50%; background:#22C55E; }
+
+  /* === COLOR SWATCHES === */
+  .swatch-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(170px,1fr)); gap:var(--space-3); margin-top:var(--space-4); }
+  .swatch {
+    background:var(--shell-surface);
+    border:1px solid var(--shell-border);
+    border-radius:10px;
+    overflow:hidden;
+    cursor:pointer;
+    transition: transform .25s ease, box-shadow .25s ease;
+  }
+  .swatch:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,.06); }
+  .swatch-color { height:90px; position:relative; }
+  .swatch-color::after {
+    content:"copiar";
+    position:absolute; inset:0;
+    display:grid; place-items:center;
+    background:rgba(0,0,0,.5); color:#fff;
+    font-size:var(--text-xs); font-weight:500; text-transform:uppercase; letter-spacing:.1em;
+    opacity:0; transition:opacity .2s;
+  }
+  .swatch:hover .swatch-color::after { opacity:1; }
+  .swatch-info { padding: var(--space-3) var(--space-4); }
+  .swatch-name { font-size:var(--text-sm); font-weight:600; color:var(--shell-text); }
+  .swatch-hex { font-family:'JetBrains Mono', monospace; font-size:var(--text-xs); color:var(--shell-text-dim); margin-top:2px; }
+  .swatch-desc { font-size:var(--text-xs); color:var(--shell-text-dim); margin-top:var(--space-2); line-height:1.4; }
+  .swatch.copied .swatch-color::after { content:"¡copiado!"; opacity:1; background:rgba(34,197,94,.85); }
+
+  /* === TYPOGRAPHY DEMOS === */
+  .type-row {
+    border-bottom:1px solid var(--shell-border);
+    padding: var(--space-5) 0;
+    display:grid; grid-template-columns:140px 1fr; gap:var(--space-5); align-items:baseline;
+  }
+  .type-meta { font-size:var(--text-xs); color:var(--shell-text-dim); }
+  .type-meta code { font-family:'JetBrains Mono', monospace; display:block; margin-top:2px; }
+  .type-sample { color:var(--text); }
+
+  /* === COMPONENTS PREVIEW === */
+  .components-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:var(--space-6); }
+
+  /* Botones (estilados desde la sub-marca activa) */
+  .btn-primary {
+    display:inline-flex; align-items:center; gap:var(--space-2);
+    padding: var(--space-3) var(--space-8);
+    border-radius:9999px;
+    background:var(--brand-deep);
+    color:#fff; border:none; cursor:pointer;
+    font-family:var(--font-body); font-weight:500; font-size:var(--text-sm);
+    text-decoration:none;
+    transition: transform .3s, box-shadow .3s;
+  }
+  .btn-primary:hover { transform:translateY(-2px); box-shadow:var(--shadow-md); }
+  .btn-secondary {
+    display:inline-flex; align-items:center; gap:var(--space-2);
+    padding: var(--space-3) var(--space-8);
+    border-radius:9999px;
+    background:transparent;
+    color:var(--text);
+    border:1px solid var(--border);
+    font-family:var(--font-body); font-weight:500; font-size:var(--text-sm);
+    text-decoration:none; cursor:pointer;
+    transition: transform .3s, box-shadow .3s;
+  }
+  .btn-secondary:hover { transform:translateY(-2px); }
+
+  /* Card */
+  .demo-card {
+    background:var(--bg-card);
+    border:1px solid var(--border-light);
+    border-radius:var(--radius);
+    padding:var(--space-8);
+    transition: transform .3s, border-color .3s, box-shadow .3s;
+  }
+  .demo-card:hover { transform:translateY(-4px); border-color:var(--brand-soft); box-shadow:var(--shadow-md); }
+  .demo-card-icon {
+    width:44px; height:44px; border-radius:10px;
+    background:var(--brand-glow, rgba(154,123,61,.15));
+    display:grid; place-items:center; font-size:var(--text-lg);
+    margin-bottom:var(--space-5);
+  }
+  .demo-card h4 {
+    font-family:var(--font-display); font-weight:600; font-size:var(--text-md);
+    margin-bottom:var(--space-2);
+  }
+  .demo-card p { color:var(--text-dim); font-size:var(--text-sm); }
+
+  /* Badge */
+  .demo-badge {
+    display:inline-block;
+    padding: var(--space-2) var(--space-5);
+    border-radius:9999px;
+    background:var(--bg);
+    border:1px solid var(--border);
+    font-size:var(--text-sm); font-weight:500;
+    color:var(--text);
+    font-family:var(--font-body);
+  }
+
+  /* Hero demo */
+  .demo-hero { padding: var(--space-12) var(--space-8); }
+  .demo-hero .eyebrow-marca {
+    font-family:var(--font-body); font-size:var(--text-xs);
+    font-weight:500; color:var(--brand-deep);
+    text-transform:uppercase; letter-spacing:var(--tracking-widest);
+    margin-bottom:var(--space-4);
+  }
+  .demo-hero h1 {
+    font-family:var(--font-display);
+    font-size:clamp(2rem,5vw,3.5rem);
+    font-weight:800; line-height:1.1;
+    letter-spacing:var(--tracking-tighter);
+    color:var(--grey-dark, var(--text));
+    margin-bottom:var(--space-3);
+  }
+  .demo-hero h1 em {
+    font-style:normal;
+    background: linear-gradient(135deg, var(--brand-deep), var(--brand-soft));
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    background-clip:text;
+  }
+  .demo-hero p { color:var(--text-dim); font-size:var(--text-md); max-width:520px; margin-bottom:var(--space-6); }
+
+  /* Talento decorative quote */
+  [data-brand="talento"] .demo-quote {
+    font-family: var(--font-decorative);
+    font-style: italic;
+    font-size: var(--text-xl);
+    color: var(--brand-deep);
+    text-align:center;
+    padding: var(--space-8);
+    line-height: 1.4;
+  }
+
+  /* Earth tier showcase */
+  .earth-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:var(--space-3); margin-top:var(--space-4); }
+  @media (max-width:700px) { .earth-grid { grid-template-columns:repeat(2,1fr); } }
+  .earth-block {
+    aspect-ratio: 1;
+    border-radius: 8px;
+    display:flex; align-items:flex-end; padding: var(--space-4);
+    font-family:var(--font-body); font-size:var(--text-sm); font-weight:600;
+  }
+
+  /* === CODE BLOCKS === */
+  .code-block {
+    position:relative;
+    background:#1A1A1A;
+    color:#E5E5E5;
+    border-radius:10px;
+    padding: var(--space-5) var(--space-6);
+    font-family:'JetBrains Mono', monospace;
+    font-size:var(--text-sm);
+    line-height:1.6;
+    overflow-x:auto;
+    margin: var(--space-4) 0;
+  }
+  .code-block pre { white-space:pre; }
+  .code-copy-btn {
+    position:absolute; top:8px; right:8px;
+    background:rgba(255,255,255,.1); color:#fff;
+    border:none; padding: 6px 12px; border-radius:6px;
+    font-family:inherit; font-size:var(--text-xs);
+    cursor:pointer; opacity:0; transition:opacity .2s;
+  }
+  .code-block:hover .code-copy-btn { opacity:1; }
+  .code-copy-btn:hover { background:rgba(255,255,255,.2); }
+  .code-copy-btn.copied { background:rgba(34,197,94,.4); }
+
+  /* Tag highlights in code */
+  .code-block .k { color:#FF7B72; }   /* keyword */
+  .code-block .s { color:#A5D6FF; }   /* string */
+  .code-block .c { color:#7C8794; }   /* comment */
+  .code-block .v { color:#FFA657; }   /* variable */
+
+  /* === META TABLE === */
+  .meta-table {
+    width:100%; border-collapse:collapse; font-size:var(--text-sm);
+    margin-top:var(--space-4); border:1px solid var(--shell-border); border-radius:10px; overflow:hidden;
+  }
+  .meta-table th, .meta-table td { padding:var(--space-3) var(--space-4); text-align:left; border-bottom:1px solid var(--shell-border); }
+  .meta-table th { background:#F5F4F0; font-weight:600; font-size:var(--text-xs); text-transform:uppercase; letter-spacing:.08em; color:var(--shell-text-dim); }
+  .meta-table tr:last-child td { border-bottom:none; }
+  .meta-table code { font-family:'JetBrains Mono',monospace; font-size:var(--text-xs); background:#F5F4F0; padding:2px 6px; border-radius:4px; }
+
+  /* === PROMPT CARD === */
+  .prompt-card {
+    border:1px solid var(--shell-border);
+    border-radius:12px;
+    margin: var(--space-5) 0;
+    overflow:hidden;
+    background:var(--shell-surface);
+  }
+  .prompt-card-head {
+    padding: var(--space-4) var(--space-5);
+    background:#F5F4F0;
+    border-bottom:1px solid var(--shell-border);
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .prompt-card-head h4 { font-family:'Syne', sans-serif; font-size:var(--text-base); font-weight:700; }
+  .prompt-card-body {
+    padding: var(--space-5);
+    font-family:'JetBrains Mono', monospace;
+    font-size:var(--text-xs);
+    line-height:1.7;
+    white-space:pre-wrap;
+    color:#3A3A3A;
+    max-height:340px; overflow-y:auto;
+  }
+  .prompt-copy {
+    background:var(--shell-accent); color:#fff; border:none;
+    padding:6px 12px; border-radius:6px;
+    font-family:'Outfit',sans-serif; font-size:var(--text-xs); font-weight:500;
+    cursor:pointer;
+  }
+  .prompt-copy.copied { background:#22C55E; }
+
+  /* Download bar (sticky bottom) */
+  .download-bar {
+    position:fixed; bottom:var(--space-5); right:var(--space-5);
+    background:var(--shell-accent);
+    color:#fff;
+    padding: var(--space-3) var(--space-5);
+    border-radius:9999px;
+    box-shadow: 0 12px 32px rgba(0,0,0,.18);
+    display:flex; align-items:center; gap:var(--space-3);
+    z-index:50;
+  }
+  .download-bar a {
+    color:#fff; text-decoration:none; font-size:var(--text-sm); font-weight:500;
+    padding: 4px 10px; border-radius:9999px;
+    background:rgba(255,255,255,.1);
+    transition:background .2s;
+  }
+  .download-bar a:hover { background:rgba(255,255,255,.2); }
+  .download-bar .dl-label { font-size:var(--text-xs); opacity:.7; margin-right:var(--space-2); }
+
+  /* Strategy callout */
+  .callout {
+    padding: var(--space-5) var(--space-6);
+    border-left: 3px solid var(--shell-accent);
+    background:#F5F4F0;
+    border-radius: 0 8px 8px 0;
+    margin: var(--space-5) 0;
+    font-size:var(--text-sm);
+  }
+  .callout strong { color:var(--shell-text); }
+
+  /* Cover section */
+  .cover {
+    padding: var(--space-20) var(--space-8) var(--space-16);
+    border-bottom:1px solid var(--shell-border);
+    margin-bottom: var(--space-12);
+  }
+  .cover h1 {
+    font-family:'Syne',sans-serif; font-weight:800;
+    font-size:clamp(2.5rem, 6vw, 4.5rem); line-height:1.05;
+    letter-spacing:var(--tracking-tighter);
+    margin-bottom:var(--space-4);
+    max-width:14ch;
+  }
+  .cover h1 em { font-style:normal; color:#C4907C; }
+  .cover p { font-size:var(--text-md); color:var(--shell-text-dim); max-width:60ch; }
+  .cover-meta { display:flex; gap:var(--space-8); margin-top:var(--space-8); flex-wrap:wrap; }
+  .cover-meta div { font-size:var(--text-sm); }
+  .cover-meta strong { display:block; color:var(--shell-text); font-weight:600; margin-bottom:2px; }
+  .cover-meta span { color:var(--shell-text-dim); }
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div>
+    <span class="app-logo">Design <span>System</span></span>
+    <span class="app-version">v1.0 · MSV · 2026</span>
+  </div>
+  <div class="brand-switcher" role="tablist" aria-label="Cambiar de sub-marca">
+    <button class="active" data-target="portfolio" role="tab">Portfolio · Vibe Coder</button>
+    <button data-target="talento" role="tab">Talento Impulsa · Institucional</button>
+  </div>
+</header>
+
+<div class="layout">
+
+  <aside class="side-nav">
+    <h4>Inicio</h4>
+    <a href="#estrategia" class="active">Estrategia</a>
+    <h4>Foundations</h4>
+    <a href="#color">Color</a>
+    <a href="#tipografia">Tipografía</a>
+    <a href="#espaciado">Espaciado y radios</a>
+    <a href="#sombras">Sombras y motion</a>
+    <h4>Componentes</h4>
+    <a href="#hero">Hero</a>
+    <a href="#botones">Botones</a>
+    <a href="#cards">Cards</a>
+    <a href="#badges">Badges y eyebrow</a>
+    <h4>Aplicar</h4>
+    <a href="#prompts">Prompts para IAs</a>
+    <a href="#descargas">Descargas</a>
+  </aside>
+
+  <main class="main" id="demo-root" data-brand="portfolio">
+
+    <!-- COVER -->
+    <section class="cover" id="estrategia">
+      <p class="eyebrow">Design System v1.0 · 2026</p>
+      <h1>Una arquitectura visual <em>sistematizada</em> para escalar.</h1>
+      <p>Dos sub-marcas hermanas que comparten estructura técnica pero hablan distintos lenguajes visuales: <strong>Portfolio personal</strong> (cálido, artesanal, vibe coder) y <strong>Talento Impulsa Consulting</strong> (institucional, autoritativo, modelo PCA™). Mismos tokens, distintos valores. Esto te da escalabilidad sin reinventar.</p>
+      <div class="cover-meta">
+        <div><strong>Versión</strong><span>1.0.0 — 02/05/2026</span></div>
+        <div><strong>Formatos</strong><span>JSON · CSS · Tailwind · prompts</span></div>
+        <div><strong>Tipografías</strong><span>Syne · Outfit · Cormorant Garamond</span></div>
+        <div><strong>Mantenedor</strong><span>María Soledad Vila</span></div>
+      </div>
+
+      <div class="callout" style="margin-top:var(--space-10)">
+        <strong>Lectura estratégica.</strong> En el mercado argentino 2026, la mayoría de consultoras IA y estudios de diseño usan paletas azul-corporate o purple-tech. Tu paleta cálida (terracota + crema + dorado) es <strong>defendible y reconocible</strong>. Sistematizarla acá es protegerla. Cuando contrates a alguien, le pasás este archivo y ya saben las reglas; cuando uses una IA generativa, pegás el bloque de prompt y te ahorrás 20 minutos de iteración por output.
+      </div>
+    </section>
+
+    <!-- COLOR -->
+    <section id="color">
+      <p class="eyebrow">Foundations · 01</p>
+      <h2 class="section-title">Color</h2>
+      <p class="section-lead">Cada sub-marca tiene su propia paleta. Cambiá la pestaña arriba para ver la otra. Click en cualquier color para copiar el HEX.</p>
+
+      <div class="demo">
+        <div class="demo-label">Vista en vivo · Sub-marca activa</div>
+        <p style="font-family:var(--font-display); font-size:var(--text-xl); font-weight:700; color:var(--text);">Esta sección hereda los colores y tipografía de la sub-marca activa. Cambiala arriba.</p>
+      </div>
+
+      <h3>Marca</h3>
+      <div class="swatch-grid" id="swatches-brand"></div>
+
+      <h3>Neutros y fondos</h3>
+      <div class="swatch-grid" id="swatches-neutral"></div>
+
+      <h3 data-portfolio-only>Acentos extendidos</h3>
+      <div class="swatch-grid" id="swatches-accent" data-portfolio-only></div>
+
+      <h3 data-talento-only style="display:none">Escala tierra (jerarquías de niveles)</h3>
+      <div class="earth-grid" data-talento-only style="display:none" id="earth-grid"></div>
+
+      <h3 data-talento-only style="display:none">Modo dark (hero institucional)</h3>
+      <div class="swatch-grid" data-talento-only style="display:none" id="swatches-dark"></div>
+    </section>
+
+    <!-- TIPOGRAFIA -->
+    <section id="tipografia">
+      <p class="eyebrow">Foundations · 02</p>
+      <h2 class="section-title">Tipografía</h2>
+      <p class="section-lead">Pares tipográficos diferenciados por sub-marca. Cargás desde Google Fonts una sola vez.</p>
+
+      <div class="demo">
+        <div class="demo-label">Vista en vivo</div>
+        <div class="type-row">
+          <div class="type-meta">Display 5xl<br><code>--text-5xl</code><br>extrabold 800</div>
+          <div class="type-sample" style="font-family:var(--font-display); font-size:var(--text-5xl); font-weight:800; line-height:1.1; letter-spacing:var(--tracking-tighter);">Construyo aplicaciones</div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">H2 · 3xl<br><code>--text-3xl</code><br>bold 700</div>
+          <div class="type-sample" style="font-family:var(--font-display); font-size:var(--text-3xl); font-weight:700; letter-spacing:var(--tracking-tight);">El Ecosistema PCA</div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">H4 · xl<br><code>--text-xl</code><br>semibold 600</div>
+          <div class="type-sample" style="font-family:var(--font-display); font-size:var(--text-xl); font-weight:600;">Arquitectura Web</div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">Lead · md<br><code>--text-md</code><br>light 300</div>
+          <div class="type-sample" style="font-family:var(--font-body); font-size:var(--text-md); font-weight:300;">Soy María Soledad. Durante años ayudé a profesionales y PyMEs a traducir la tecnología a su realidad diaria.</div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">Body · base<br><code>--text-base</code><br>light 300</div>
+          <div class="type-sample" style="font-family:var(--font-body); font-size:var(--text-base); font-weight:300;">Hoy no solo consulto: construyo. Desarrollo aplicaciones web que integran IA de forma nativa, devolviéndole el control a cada organización.</div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">Eyebrow · xs<br><code>--text-xs</code><br>medium 500 + tracking-widest</div>
+          <div class="type-sample" style="font-size:var(--text-xs); text-transform:uppercase; letter-spacing:var(--tracking-widest); font-weight:500; color:var(--brand-deep);">Vibe Coder · Arquitecta Digital</div>
+        </div>
+        <div class="type-row" data-talento-only style="display:none">
+          <div class="type-meta">Decorativa<br><code>--font-decorative</code><br>Cormorant italic</div>
+          <div class="type-sample demo-quote" style="text-align:left; padding:0;">El problema no es la herramienta. Es la ausencia de arquitectura.</div>
+        </div>
+      </div>
+
+      <table class="meta-table">
+        <thead><tr><th>Token</th><th>Valor</th><th>Uso</th></tr></thead>
+        <tbody>
+          <tr><td><code>--text-6xl</code></td><td><code>4.5rem</code> / 72px</td><td>Hero gigante</td></tr>
+          <tr><td><code>--text-5xl</code></td><td><code>3.75rem</code> / 60px</td><td>Display, números stats grandes</td></tr>
+          <tr><td><code>--text-4xl</code></td><td><code>3rem</code> / 48px</td><td>H1</td></tr>
+          <tr><td><code>--text-3xl</code></td><td><code>2.25rem</code> / 36px</td><td>H2 sección</td></tr>
+          <tr><td><code>--text-2xl</code></td><td><code>1.875rem</code> / 30px</td><td>H3</td></tr>
+          <tr><td><code>--text-xl</code></td><td><code>1.5rem</code> / 24px</td><td>H4 cards</td></tr>
+          <tr><td><code>--text-md</code></td><td><code>1.125rem</code> / 18px</td><td>Lead, intro</td></tr>
+          <tr><td><code>--text-base</code></td><td><code>1rem</code> / 16px</td><td>Body default</td></tr>
+          <tr><td><code>--text-sm</code></td><td><code>0.875rem</code> / 14px</td><td>UI, microcopy</td></tr>
+          <tr><td><code>--text-xs</code></td><td><code>0.75rem</code> / 12px</td><td>Eyebrow, captions</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ESPACIADO -->
+    <section id="espaciado">
+      <p class="eyebrow">Foundations · 03</p>
+      <h2 class="section-title">Espaciado y radios</h2>
+      <p class="section-lead">Escala basada en múltiplos de 4px (1rem = 16px = base). Es la misma para ambas marcas.</p>
+
+      <table class="meta-table">
+        <thead><tr><th>Token</th><th>Valor</th><th>Aplicación</th></tr></thead>
+        <tbody>
+          <tr><td><code>--space-2</code></td><td>8px</td><td>Gap entre icono y texto, padding micro</td></tr>
+          <tr><td><code>--space-4</code></td><td>16px</td><td>Padding de inputs, gap entre elementos</td></tr>
+          <tr><td><code>--space-6</code></td><td>24px</td><td>Padding card medio, gap entre cards</td></tr>
+          <tr><td><code>--space-8</code></td><td>32px</td><td>Padding card default</td></tr>
+          <tr><td><code>--space-12</code></td><td>48px</td><td>Margen entre secciones internas</td></tr>
+          <tr><td><code>--space-24</code></td><td>96px</td><td>Padding vertical de sección desktop</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Radios</h3>
+      <p>Portfolio usa <code>1rem (16px)</code> como default — sensación cálida y orgánica. Talento usa <code>0.5rem (8px)</code> — sensación institucional. Pill (<code>9999px</code>) en CTAs y badges en ambas marcas.</p>
+
+      <div class="demo" style="display:flex; gap:var(--space-5); flex-wrap:wrap; align-items:center;">
+        <div style="background:var(--bg-card); border:1px solid var(--border); padding:var(--space-5); border-radius:.25rem; min-width:120px; text-align:center; font-size:var(--text-xs);"><code style="background:transparent;">.25rem</code><br>sm</div>
+        <div style="background:var(--bg-card); border:1px solid var(--border); padding:var(--space-5); border-radius:.5rem; min-width:120px; text-align:center; font-size:var(--text-xs);"><code style="background:transparent;">.5rem</code><br>md</div>
+        <div style="background:var(--bg-card); border:1px solid var(--border); padding:var(--space-5); border-radius:1rem; min-width:120px; text-align:center; font-size:var(--text-xs);"><code style="background:transparent;">1rem</code><br>xl (default portfolio)</div>
+        <div style="background:var(--bg-card); border:1px solid var(--border); padding:var(--space-5); border-radius:1.5rem; min-width:120px; text-align:center; font-size:var(--text-xs);"><code style="background:transparent;">1.5rem</code><br>2xl</div>
+        <div style="background:var(--bg-card); border:1px solid var(--border); padding:var(--space-5); border-radius:9999px; min-width:120px; text-align:center; font-size:var(--text-xs);"><code style="background:transparent;">pill</code><br>9999px</div>
+      </div>
+    </section>
+
+    <!-- SOMBRAS -->
+    <section id="sombras">
+      <p class="eyebrow">Foundations · 04</p>
+      <h2 class="section-title">Sombras y motion</h2>
+      <p class="section-lead">Las sombras de portfolio tienen tinte terracota (firma de marca). Las de Talento son grises neutras institucionales.</p>
+
+      <div class="demo" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:var(--space-6);">
+        <div style="background:var(--bg-card); padding:var(--space-6); border-radius:var(--radius); box-shadow:0 4px 16px var(--brand-glow, rgba(26,24,20,.06));">
+          <div style="font-family:var(--font-body); font-size:var(--text-sm); font-weight:600;">shadow-sm</div>
+          <div style="font-size:var(--text-xs); color:var(--text-dim); margin-top:4px;">Hover sutil</div>
+        </div>
+        <div style="background:var(--bg-card); padding:var(--space-6); border-radius:var(--radius); box-shadow:var(--shadow-md);">
+          <div style="font-family:var(--font-body); font-size:var(--text-sm); font-weight:600;">shadow-md</div>
+          <div style="font-size:var(--text-xs); color:var(--text-dim); margin-top:4px;">Default cards</div>
+        </div>
+        <div style="background:var(--bg-card); padding:var(--space-6); border-radius:var(--radius); box-shadow:var(--shadow-lg);">
+          <div style="font-family:var(--font-body); font-size:var(--text-sm); font-weight:600;">shadow-lg</div>
+          <div style="font-size:var(--text-xs); color:var(--text-dim); margin-top:4px;">Cards hover destacado</div>
+        </div>
+      </div>
+
+      <h3>Motion</h3>
+      <table class="meta-table">
+        <thead><tr><th>Token</th><th>Duración</th><th>Uso</th></tr></thead>
+        <tbody>
+          <tr><td><code>--duration-fast</code></td><td>200ms</td><td>Hover de links, cambios de color</td></tr>
+          <tr><td><code>--duration-base</code></td><td>300ms</td><td>Default — cards, botones</td></tr>
+          <tr><td><code>--duration-slower</code></td><td>800ms</td><td>Reveal on scroll, fade-up del hero</td></tr>
+          <tr><td><code>--ease-standard</code></td><td>cubic-bezier(.4,0,.2,1)</td><td>Default</td></tr>
+          <tr><td><code>--ease-organic</code></td><td>cubic-bezier(.34,1.56,.64,1)</td><td>Sólo portfolio · sensación rebote</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- HERO -->
+    <section id="hero">
+      <p class="eyebrow">Componentes · 01</p>
+      <h2 class="section-title">Hero</h2>
+      <p class="section-lead">Patrón canónico de portada para landing y secciones principales.</p>
+
+      <div class="demo demo-hero">
+        <div class="eyebrow-marca"
+             data-portfolio-text="Vibe Coder · Arquitecta Digital"
+             data-talento-text="Modelo PCA™ · Productividad Consciente Aumentada">
+          Vibe Coder · Arquitecta Digital
+        </div>
+        <h1 data-portfolio-text="Construyo <em>aplicaciones con IA</em> que devuelven el control."
+            data-talento-text="Diseñamos <em>productividad con conciencia</em> sin perder criterio.">
+          Construyo <em>aplicaciones con IA</em> que devuelven el control.
+        </h1>
+        <p data-portfolio-text="Desarrollo web low-code, vibe coding e inteligencia artificial integrada de forma nativa para PyMEs y profesionales."
+           data-talento-text="Sistemas de productividad consciente para profesionales y organizaciones que buscan integrar Inteligencia Artificial sin perder criterio ni liderazgo.">
+          Desarrollo web low-code, vibe coding e inteligencia artificial integrada de forma nativa para PyMEs y profesionales.
+        </p>
+        <div style="display:flex; gap:var(--space-3); flex-wrap:wrap;">
+          <a class="btn-primary" href="#"
+             data-portfolio-text="💬 Conversemos"
+             data-talento-text="Conversar sobre la implementación">
+            💬 Conversemos
+          </a>
+          <a class="btn-secondary" href="#"
+             data-portfolio-text="Ver portfolio"
+             data-talento-text="Explorar el método">
+            Ver portfolio
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- BOTONES -->
+    <section id="botones">
+      <p class="eyebrow">Componentes · 02</p>
+      <h2 class="section-title">Botones</h2>
+      <p class="section-lead">Pill default. Primary = brand-deep + texto blanco. Secondary = transparente con borde.</p>
+
+      <div class="demo" style="display:flex; gap:var(--space-4); flex-wrap:wrap; align-items:center;">
+        <a class="btn-primary" href="#">CTA Primario</a>
+        <a class="btn-primary" href="#">💬 Con icono</a>
+        <a class="btn-secondary" href="#">Secundario</a>
+        <a class="btn-secondary" href="#">↗ Externo</a>
+      </div>
+
+      <div class="code-block">
+<button class="code-copy-btn" onclick="copyCode(this)">copiar</button>
+<pre><span class="c">/* HTML */</span>
+&lt;a class="btn-primary" href="#"&gt;💬 Conversemos&lt;/a&gt;
+
+<span class="c">/* CSS */</span>
+.btn-primary {
+  display: inline-flex; align-items: center; gap: <span class="v">var(--space-2)</span>;
+  padding: <span class="v">var(--space-3) var(--space-8)</span>;
+  border-radius: 9999px;
+  background: <span class="v">var(--brand-deep)</span>;
+  color: #fff;
+  font-family: <span class="v">var(--font-body)</span>;
+  font-weight: 500; font-size: <span class="v">var(--text-sm)</span>;
+  transition: transform .3s, box-shadow .3s;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: <span class="v">var(--shadow-md)</span>; }</pre>
+      </div>
+    </section>
+
+    <!-- CARDS -->
+    <section id="cards">
+      <p class="eyebrow">Componentes · 03</p>
+      <h2 class="section-title">Cards</h2>
+      <p class="section-lead">Card base con icono pill, titular y body. Hover sube 4px y aparece sombra de marca.</p>
+
+      <div class="demo">
+        <div class="components-grid">
+          <div class="demo-card">
+            <div class="demo-card-icon">⚙️</div>
+            <h4>Arquitectura Web</h4>
+            <p>Estructuras digitales que optimizan procesos y centralizan funciones en un ecosistema eficiente.</p>
+          </div>
+          <div class="demo-card">
+            <div class="demo-card-icon">🤖</div>
+            <h4>Delegación Inteligente</h4>
+            <p>La IA ejecuta. El humano decide. Tu equipo se enfoca en lo estratégico.</p>
+          </div>
+          <div class="demo-card">
+            <div class="demo-card-icon">🔒</div>
+            <h4>Seguridad de Datos</h4>
+            <p>Protocolo robusto que asegura la integridad y privacidad en cada interacción.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BADGES -->
+    <section id="badges">
+      <p class="eyebrow">Componentes · 04</p>
+      <h2 class="section-title">Badges y eyebrow</h2>
+      <p class="section-lead">Pill badges para sellos de confianza. Eyebrow uppercase para introducir secciones.</p>
+
+      <div class="demo" style="display:flex; gap:var(--space-3); flex-wrap:wrap;">
+        <span class="demo-badge">🛡️ Blindaje Corporativo</span>
+        <span class="demo-badge">🔐 Datos Privados Protegidos</span>
+        <span class="demo-badge">✅ IA Ética y Auditable</span>
+      </div>
+      <div class="demo" data-talento-only style="display:none">
+        <div class="demo-quote">No enseñamos herramientas. Diseñamos estructuras.</div>
+      </div>
+    </section>
+
+    <!-- PROMPTS -->
+    <section id="prompts">
+      <p class="eyebrow">Aplicar · 01</p>
+      <h2 class="section-title">Prompts para IAs</h2>
+      <p class="section-lead">Pegá estos bloques al inicio de tus conversaciones con v0.dev, Lovable, Bolt, Cursor o Claude. Antes de pedir algo, asegurate de que la IA "sepa" en qué sub-marca estás.</p>
+
+      <div class="prompt-card">
+        <div class="prompt-card-head">
+          <h4>📦 Identidad — Portfolio (Vibe Coder)</h4>
+          <button class="prompt-copy" onclick="copyPrompt(this, 'prompt-portfolio')">Copiar</button>
+        </div>
+        <div class="prompt-card-body" id="prompt-portfolio">Trabajo bajo el design system "Portfolio María Soledad Vila — Vibe Coder & Arquitecta Digital".
+
+PALETA (usar exactos):
+- Marca: #C4907C terracota (soft #D4A797, deep #A87464)
+- Fondo: #F5F2F0 beige cálido | Card: blanco | Borde: #DDD7D2
+- Texto: #2C2A2E (text-dim #7A7580)
+- Acentos extendidos: #ABB7A3 sage / #A48997 lavender / #1E2A47 navy / #DAD2BB sand
+
+TIPOGRAFÍA:
+- Display: 'Syne', sans-serif (700/800)
+- Body: 'Outfit', sans-serif (300/400/500/600)
+- Cargar: https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Syne:wght@400;600;700;800&display=swap
+
+PERSONALIDAD: cálida, artesanal, humana — NO corporate-tech.
+- Bordes: 16px default, pill en botones
+- Sombras con tinte terracota: 0 8px 24px rgba(196,144,124,0.12)
+- Layout max 1100px, padding 96px desktop / 64px mobile
+- Animaciones fade-up y blobs radiales pulsando como halos
+
+EVITAR: Inter/Roboto/Arial, purple gradients, azul corporate, layouts simétricos rígidos.
+Idioma: rioplatense (vos, querés).</div>
+      </div>
+
+      <div class="prompt-card">
+        <div class="prompt-card-head">
+          <h4>📦 Identidad — Talento Impulsa (Institucional)</h4>
+          <button class="prompt-copy" onclick="copyPrompt(this, 'prompt-talento')">Copiar</button>
+        </div>
+        <div class="prompt-card-body" id="prompt-talento">Trabajo bajo el design system "Talento Impulsa Consulting — Modelo PCA™".
+
+PALETA:
+- Marca: #9A7B3D dorado mostaza (soft #B8995A, deep #75582A)
+- Fondos: #EFE9DB crema / #DDD8D4 stone / #E3D7D2 warm | Card: blanco
+- Texto: #1A1814 (text-dim #6E6859) | Borde: #C8C0B5
+
+ESCALA TIERRA (jerarquías):
+#E3D7D2 → #BFABA2 → #8C7D7A → #684B45 → #3B3935
+
+MODO DARK (solo portadas dramáticas):
+bg #0A0A0A · teal #1F4A52 · gold #D4B062
+
+TIPOGRAFÍA:
+- Display + body: 'Outfit', sans-serif (cohesión institucional)
+- Decorativa: 'Cormorant Garamond', serif italic (citas, frases-tesis)
+- Cargar: https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Outfit:wght@300;400;500;600;700&display=swap
+
+PERSONALIDAD: institucional pero NO fría. Editorial / tesis. Autoridad cálida.
+- Bordes 4-8px en cards, pill en CTAs
+- Sombras grises: 0 8px 20px rgba(26,24,20,0.08)
+- Mucho aire, jerarquías claras, citas en cursiva
+
+CONCEPTO: "No enseñamos herramientas. Diseñamos estructuras." PCA™ = Sistema + Delegación Inteligente + Liderazgo Consciente.
+
+EVITAR: azul corporate, sombras coloreadas, gradientes saturados, múltiples acentos.
+Idioma: rioplatense.</div>
+      </div>
+
+      <div class="prompt-card">
+        <div class="prompt-card-head">
+          <h4>🎯 Prompt maestro (todo el sistema)</h4>
+          <button class="prompt-copy" onclick="copyPrompt(this, 'prompt-master')">Copiar</button>
+        </div>
+        <div class="prompt-card-body" id="prompt-master">Sos mi asistente de diseño y desarrollo. Trabajo bajo dos sub-marcas hermanas con un design system unificado:
+
+═══ SUB-MARCA A: PORTFOLIO (Vibe Coder & Arquitecta Digital) ═══
+Color marca: #C4907C terracota (soft #D4A797, deep #A87464)
+Fondo: #F5F2F0 beige cálido | Card: blanco | Borde: #DDD7D2
+Texto: #2C2A2E (text-dim #7A7580)
+Acentos: #ABB7A3 sage / #A48997 lavender / #1E2A47 navy / #DAD2BB sand
+Tipo: Syne display + Outfit body
+Radius default: 16px | Sombras con tinte terracota
+Personalidad: cálida, artesanal, humana, editorial
+
+═══ SUB-MARCA B: TALENTO IMPULSA CONSULTING (institucional) ═══
+Color marca: #9A7B3D dorado mostaza (soft #B8995A, deep #75582A)
+Fondo: #EFE9DB crema | Stone: #DDD8D4 | Card: blanco
+Texto: #1A1814 (text-dim #6E6859)
+Tierra: #E3D7D2 → #BFABA2 → #8C7D7A → #684B45 → #3B3935
+Modo dark hero: bg #0A0A0A, teal #1F4A52, gold #D4B062
+Tipo: Outfit (display+body) + Cormorant Garamond italic (decorativa)
+Radius default: 8px | Sombras grises neutras
+Personalidad: institucional cálida, autoridad, tono de tesis
+
+═══ TOKENS COMPARTIDOS ═══
+Spacing: múltiplos de 4 (1rem=16px base)
+Escala tipo: xs/sm/base/md/lg/xl/2xl(30)/3xl(36)/4xl(48)/5xl(60)/6xl(72)
+Container max: 1100px
+Motion: 200ms fast / 300ms base / 800ms reveals
+Easing: cubic-bezier(0.4,0,0.2,1) standard, cubic-bezier(0.34,1.56,0.64,1) organic
+
+═══ REGLAS ═══
+- "para mi portfolio" o "Vibe Coder" → SUB-MARCA A
+- "para Talento Impulsa", "PCA", "consultoría" → SUB-MARCA B
+- Nunca Inter/Roboto/Arial. Nunca purple gradients. Nunca azul corporativo.
+- Default cálido, acentos con moderación.
+- Idioma rioplatense (vos, querés).
+- Si no aclaro la sub-marca, preguntame primero.
+
+¿Para qué sub-marca trabajamos hoy?</div>
+      </div>
+    </section>
+
+    <!-- DESCARGAS -->
+    <section id="descargas">
+      <p class="eyebrow">Aplicar · 02</p>
+      <h2 class="section-title">Descargas</h2>
+      <p class="section-lead">Cuatro archivos. Llevátelos a cualquier proyecto, IA o conversación con un dev.</p>
+
+      <div class="components-grid">
+        <div class="demo-card" style="--bg-card:#fff; --border-light:#E5E2DD; --radius:8px;" onclick="downloadFile('tokens.json')">
+          <div class="demo-card-icon" style="background:#1A1A1A; color:#D4B062;">📋</div>
+          <h4 style="font-family:'Syne'; color:#1A1A1A;">tokens.json</h4>
+          <p style="color:#6B6B6B;">Formato W3C Design Tokens. Lo que entienden Figma, Style Dictionary, v0 y Cursor. Es el "source of truth" del sistema.</p>
+        </div>
+        <div class="demo-card" style="--bg-card:#fff; --border-light:#E5E2DD; --radius:8px;" onclick="downloadFile('tokens.css')">
+          <div class="demo-card-icon" style="background:#1A1A1A; color:#A5D6FF;">🎨</div>
+          <h4 style="font-family:'Syne'; color:#1A1A1A;">tokens.css</h4>
+          <p style="color:#6B6B6B;">Variables CSS listas. Aplicás <code>data-brand="portfolio"</code> o <code>"talento"</code> y todo se resuelve solo.</p>
+        </div>
+        <div class="demo-card" style="--bg-card:#fff; --border-light:#E5E2DD; --radius:8px;" onclick="downloadFile('tailwind.config.js')">
+          <div class="demo-card-icon" style="background:#1A1A1A; color:#FF7B72;">🌬️</div>
+          <h4 style="font-family:'Syne'; color:#1A1A1A;">tailwind.config.js</h4>
+          <p style="color:#6B6B6B;">Para proyectos con Tailwind. Te da clases <code>bg-brand</code>, <code>bg-portfolio-primary</code>, <code>shadow-talento-md</code>, etc.</p>
+        </div>
+        <div class="demo-card" style="--bg-card:#fff; --border-light:#E5E2DD; --radius:8px;" onclick="downloadFile('prompts-para-ia.md')">
+          <div class="demo-card-icon" style="background:#1A1A1A; color:#FFA657;">🤖</div>
+          <h4 style="font-family:'Syne'; color:#1A1A1A;">prompts-para-ia.md</h4>
+          <p style="color:#6B6B6B;">Prompts pre-armados por caso de uso. Tu sistema viaja con vos cuando trabajás con IAs.</p>
+        </div>
+      </div>
+
+      <div class="callout" style="margin-top:var(--space-8)">
+        <strong>Próximo paso (cuando quieras escalar).</strong> Si en algún momento sumás un tercer producto o cliente, agregamos <code>data-brand="cliente-x"</code> con sus propios valores y todo el resto del sistema sigue funcionando. Eso es lo que comprás cuando sistematizás: optionalidad futura sin reescribir el pasado.
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<div class="download-bar">
+  <span class="dl-label">descargar</span>
+  <a href="#" onclick="downloadFile('tokens.json'); return false;">JSON</a>
+  <a href="#" onclick="downloadFile('tokens.css'); return false;">CSS</a>
+  <a href="#" onclick="downloadFile('tailwind.config.js'); return false;">Tailwind</a>
+  <a href="#" onclick="downloadFile('prompts-para-ia.md'); return false;">Prompts</a>
+</div>
+
+<script>
+  // === DATA: tokens por sub-marca ===
+  const PALETTES = {
+    portfolio: {
+      brand: [
+        { name:"primary",      hex:"#C4907C", desc:"Terracota — color de marca, CTAs primarios" },
+        { name:"primary-soft", hex:"#D4A797", desc:"Hover y gradientes" },
+        { name:"primary-deep", hex:"#A87464", desc:"Texto enfático y botones presionados" },
+        { name:"glow",         hex:"rgba(196,144,124,.12)", desc:"Halo / fondo de sección sutil" },
+      ],
+      neutral: [
+        { name:"bg",          hex:"#F5F2F0", desc:"Fondo principal beige cálido" },
+        { name:"bg-alt",      hex:"#EAE5E1", desc:"Fondo secundario" },
+        { name:"bg-card",     hex:"#FFFFFF", desc:"Cards y superficies elevadas" },
+        { name:"border",      hex:"#DDD7D2", desc:"Bordes definidos" },
+        { name:"border-light",hex:"#E8E3DF", desc:"Bordes sutiles" },
+        { name:"text",        hex:"#2C2A2E", desc:"Texto principal — casi negro cálido" },
+        { name:"text-dim",    hex:"#7A7580", desc:"Texto secundario" },
+        { name:"grey-dark",   hex:"#4A464F", desc:"Titulares" },
+      ],
+      accent: [
+        { name:"sage",     hex:"#ABB7A3", desc:"Verde salvia — fondos editoriales" },
+        { name:"lavender", hex:"#A48997", desc:"Lavanda apagado — círculos stats" },
+        { name:"navy",     hex:"#1E2A47", desc:"Azul marino — números enfáticos" },
+        { name:"sand",     hex:"#DAD2BB", desc:"Arena — fondos de sección" },
+      ]
+    },
+    talento: {
+      brand: [
+        { name:"primary",      hex:"#9A7B3D", desc:"Dorado mostaza — color de marca, titulares decorativos" },
+        { name:"primary-soft", hex:"#B8995A", desc:"Dorado claro" },
+        { name:"primary-deep", hex:"#75582A", desc:"Bronce — texto y CTAs presionados" },
+      ],
+      neutral: [
+        { name:"bg-cream",   hex:"#EFE9DB", desc:"Fondo crema — principal" },
+        { name:"bg-stone",   hex:"#DDD8D4", desc:"Piedra — secundario" },
+        { name:"bg-warm",    hex:"#E3D7D2", desc:"Beige rosado — bloques editoriales" },
+        { name:"bg-card",    hex:"#FFFFFF", desc:"Cards" },
+        { name:"border",     hex:"#C8C0B5", desc:"Bordes" },
+        { name:"text",       hex:"#1A1814", desc:"Negro cálido institucional" },
+        { name:"text-dim",   hex:"#6E6859", desc:"Texto secundario" },
+      ],
+      earth: [
+        { name:"tier-1", hex:"#E3D7D2", desc:"Institucional — premium" },
+        { name:"tier-2", hex:"#BFABA2", desc:"Equipo" },
+        { name:"tier-3", hex:"#8C7D7A", desc:"Intermedio" },
+        { name:"tier-4", hex:"#684B45", desc:"Profesional — base" },
+        { name:"tier-5", hex:"#3B3935", desc:"Carbón — contraste" },
+      ],
+      dark: [
+        { name:"dark-bg",    hex:"#0A0A0A", desc:"Negro profundo de hero" },
+        { name:"dark-surface", hex:"#1A1612", desc:"Superficies sobre dark" },
+        { name:"dark-teal",  hex:"#1F4A52", desc:"Verde petróleo — luz ambiente" },
+        { name:"dark-gold",  hex:"#D4B062", desc:"Dorado luminoso sobre dark" },
+      ]
+    }
+  };
+
+  function getContrastTextColor(hex) {
+    if (hex.startsWith('rgba')) return '#fff';
+    const r = parseInt(hex.slice(1,3),16);
+    const g = parseInt(hex.slice(3,5),16);
+    const b = parseInt(hex.slice(5,7),16);
+    const luma = (0.299*r + 0.587*g + 0.114*b)/255;
+    return luma > 0.6 ? '#1A1A1A' : '#fff';
+  }
+
+  function renderSwatches(containerId, items) {
+    const c = document.getElementById(containerId);
+    if (!c) return;
+    c.innerHTML = items.map(it => `
+      <div class="swatch" data-hex="${it.hex}" onclick="copyHex(this, '${it.hex}')">
+        <div class="swatch-color" style="background:${it.hex}"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">${it.name}</div>
+          <div class="swatch-hex">${it.hex}</div>
+          <div class="swatch-desc">${it.desc}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function renderEarthGrid() {
+    const grid = document.getElementById('earth-grid');
+    if (!grid) return;
+    grid.innerHTML = PALETTES.talento.earth.map(it => `
+      <div class="earth-block" style="background:${it.hex}; color:${getContrastTextColor(it.hex)};">
+        <div>
+          <div style="font-size:var(--text-xs); opacity:.85; text-transform:uppercase; letter-spacing:.1em;">${it.name}</div>
+          <div style="font-family:'JetBrains Mono'; font-size:var(--text-xs); opacity:.7; margin-top:2px;">${it.hex}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function applyBrand(brand) {
+    const root = document.getElementById('demo-root');
+    root.setAttribute('data-brand', brand);
+    document.querySelectorAll('.brand-switcher button').forEach(b => {
+      b.classList.toggle('active', b.dataset.target === brand);
+    });
+    // mostrar/ocultar bloques específicos
+    document.querySelectorAll('[data-portfolio-only]').forEach(el => el.style.display = brand === 'portfolio' ? '' : 'none');
+    document.querySelectorAll('[data-talento-only]').forEach(el => el.style.display = brand === 'talento' ? '' : 'none');
+    // re-render swatches
+    if (brand === 'portfolio') {
+      renderSwatches('swatches-brand', PALETTES.portfolio.brand);
+      renderSwatches('swatches-neutral', PALETTES.portfolio.neutral);
+      renderSwatches('swatches-accent', PALETTES.portfolio.accent);
+    } else {
+      renderSwatches('swatches-brand', PALETTES.talento.brand);
+      renderSwatches('swatches-neutral', PALETTES.talento.neutral);
+      renderSwatches('swatches-dark', PALETTES.talento.dark);
+      renderEarthGrid();
+    }
+    // intercambiar texto del hero demo
+    document.querySelectorAll(`[data-${brand}-text]`).forEach(el => {
+      el.innerHTML = el.dataset[brand + 'Text'];
+    });
+  }
+
+  document.querySelectorAll('.brand-switcher button').forEach(btn => {
+    btn.addEventListener('click', () => applyBrand(btn.dataset.target));
+  });
+
+  // copy HEX
+  function copyHex(el, hex) {
+    navigator.clipboard.writeText(hex).then(() => {
+      el.classList.add('copied');
+      setTimeout(() => el.classList.remove('copied'), 1200);
+    });
+  }
+
+  // copy code block
+  function copyCode(btn) {
+    const pre = btn.parentElement.querySelector('pre');
+    const text = pre.textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = '¡copiado!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'copiar'; btn.classList.remove('copied'); }, 1500);
+    });
+  }
+
+  // copy prompt
+  function copyPrompt(btn, id) {
+    const text = document.getElementById(id).textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = '¡copiado!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 1500);
+    });
+  }
+
+  // FILES content (embebidos para que el HTML sea autocontenido)
+  const FILES = {"tokens.json": "{\n  \"$schema\": \"https://design-tokens.github.io/community-group/format/\",\n  \"$description\": \"Design System unificado para María Soledad Vila — Portfolio (Vibe Coder) y Talento Impulsa Consulting (Institucional). Dos sub-marcas hermanas con estructura compartida y valores diferenciados.\",\n  \"$metadata\": {\n    \"version\": \"1.0.0\",\n    \"lastUpdated\": \"2026-05-02\",\n    \"author\": \"María Soledad Vila\",\n    \"brands\": [\"portfolio\", \"talento-impulsa\"]\n  },\n\n  \"color\": {\n    \"$description\": \"Paletas extraídas y sistematizadas de los materiales reales de cada sub-marca.\",\n\n    \"portfolio\": {\n      \"$description\": \"Vibe Coder & Arquitecta Digital. Paleta cálida, artesanal, humana.\",\n      \"brand\": {\n        \"primary\":      { \"$value\": \"#C4907C\", \"$type\": \"color\", \"$description\": \"Terracota — color de marca, CTAs primarios\" },\n        \"primarySoft\":  { \"$value\": \"#D4A797\", \"$type\": \"color\", \"$description\": \"Terracota suavizado para gradientes y hover\" },\n        \"primaryDeep\":  { \"$value\": \"#A87464\", \"$type\": \"color\", \"$description\": \"Terracota intenso para texto enfático y botones presionados\" },\n        \"primaryGlow\":  { \"$value\": \"rgba(196,144,124,0.12)\", \"$type\": \"color\", \"$description\": \"Halo / glow / fondos de sección sutiles\" },\n        \"primaryGlowStrong\": { \"$value\": \"rgba(196,144,124,0.22)\", \"$type\": \"color\", \"$description\": \"Halo más visible para destacados\" }\n      },\n      \"neutral\": {\n        \"bg\":         { \"$value\": \"#F5F2F0\", \"$type\": \"color\", \"$description\": \"Fondo principal, beige cálido\" },\n        \"bgAlt\":      { \"$value\": \"#EAE5E1\", \"$type\": \"color\", \"$description\": \"Fondo secundario / secciones alternadas\" },\n        \"bgCard\":     { \"$value\": \"#FFFFFF\", \"$type\": \"color\", \"$description\": \"Fondo de tarjetas y elementos elevados\" },\n        \"border\":     { \"$value\": \"#DDD7D2\", \"$type\": \"color\", \"$description\": \"Bordes definidos\" },\n        \"borderLight\":{ \"$value\": \"#E8E3DF\", \"$type\": \"color\", \"$description\": \"Bordes sutiles\" },\n        \"text\":       { \"$value\": \"#2C2A2E\", \"$type\": \"color\", \"$description\": \"Texto principal, casi negro con calidez\" },\n        \"textDim\":    { \"$value\": \"#7A7580\", \"$type\": \"color\", \"$description\": \"Texto secundario, gris cálido\" },\n        \"greyDark\":   { \"$value\": \"#4A464F\", \"$type\": \"color\", \"$description\": \"Gris oscuro para titulares\" },\n        \"greyWarm\":   { \"$value\": \"#B5B0AB\", \"$type\": \"color\", \"$description\": \"Gris cálido para texto deshabilitado\" }\n      },\n      \"accent\": {\n        \"$description\": \"Paleta extendida del PDF, para infografías, ilustraciones y secciones decorativas. Usar con moderación — no compiten con el terracota.\",\n        \"sage\":     { \"$value\": \"#ABB7A3\", \"$type\": \"color\", \"$description\": \"Verde salvia — secciones de stats, fondos editoriales\" },\n        \"lavender\": { \"$value\": \"#A48997\", \"$type\": \"color\", \"$description\": \"Lavanda apagado — círculos de stats, contraste suave\" },\n        \"navy\":     { \"$value\": \"#1E2A47\", \"$type\": \"color\", \"$description\": \"Azul marino — números enfáticos, headers en bloques claros\" },\n        \"sand\":     { \"$value\": \"#DAD2BB\", \"$type\": \"color\", \"$description\": \"Arena — fondos de sección editorial\" }\n      },\n      \"semantic\": {\n        \"success\": { \"$value\": \"#7A9472\", \"$type\": \"color\", \"$description\": \"Verde cálido en línea con la paleta sage\" },\n        \"warning\": { \"$value\": \"#D4A04A\", \"$type\": \"color\", \"$description\": \"Mostaza terroso, no amarillo brillante\" },\n        \"danger\":  { \"$value\": \"#B5604A\", \"$type\": \"color\", \"$description\": \"Rojo terracota, no rojo puro\" },\n        \"info\":    { \"$value\": \"#5A7090\", \"$type\": \"color\", \"$description\": \"Azul atemperado, en línea con navy\" }\n      }\n    },\n\n    \"talento-impulsa\": {\n      \"$description\": \"Consultora institucional. Paleta neutra cálida con acentos dorados y modo dark dramático para hero.\",\n      \"brand\": {\n        \"primary\":     { \"$value\": \"#9A7B3D\", \"$type\": \"color\", \"$description\": \"Dorado mostaza — color de marca, titulares decorativos\" },\n        \"primarySoft\": { \"$value\": \"#B8995A\", \"$type\": \"color\", \"$description\": \"Dorado claro\" },\n        \"primaryDeep\": { \"$value\": \"#75582A\", \"$type\": \"color\", \"$description\": \"Dorado oscuro / bronce para texto\" }\n      },\n      \"neutral\": {\n        \"bgCream\":    { \"$value\": \"#EFE9DB\", \"$type\": \"color\", \"$description\": \"Crema cálido — fondo principal de slides\" },\n        \"bgStone\":    { \"$value\": \"#DDD8D4\", \"$type\": \"color\", \"$description\": \"Piedra clara — fondos secundarios\" },\n        \"bgWarm\":     { \"$value\": \"#E3D7D2\", \"$type\": \"color\", \"$description\": \"Beige rosado — bloques editoriales\" },\n        \"bgCard\":     { \"$value\": \"#FFFFFF\", \"$type\": \"color\", \"$description\": \"Tarjetas elevadas\" },\n        \"border\":     { \"$value\": \"#C8C0B5\", \"$type\": \"color\", \"$description\": \"Bordes\" },\n        \"text\":       { \"$value\": \"#1A1814\", \"$type\": \"color\", \"$description\": \"Negro cálido institucional\" },\n        \"textDim\":    { \"$value\": \"#6E6859\", \"$type\": \"color\", \"$description\": \"Texto secundario\" }\n      },\n      \"earth\": {\n        \"$description\": \"Escala tierra usada en la torre de servicios. Sirve para jerarquizar 3 niveles (Profesional → Equipo → Institucional) o como sistema de tags.\",\n        \"tier1\": { \"$value\": \"#E3D7D2\", \"$type\": \"color\", \"$description\": \"Crema rosado — Institucional / nivel premium\" },\n        \"tier2\": { \"$value\": \"#BFABA2\", \"$type\": \"color\", \"$description\": \"Beige medio — Equipo\" },\n        \"tier3\": { \"$value\": \"#8C7D7A\", \"$type\": \"color\", \"$description\": \"Marrón claro\" },\n        \"tier4\": { \"$value\": \"#684B45\", \"$type\": \"color\", \"$description\": \"Cacao — Profesional / nivel base\" },\n        \"tier5\": { \"$value\": \"#3B3935\", \"$type\": \"color\", \"$description\": \"Carbón — para contraste fuerte\" }\n      },\n      \"dark\": {\n        \"$description\": \"Modo dark del hero institucional (portada PDF). Usar para portadas dramáticas, no para body.\",\n        \"bg\":      { \"$value\": \"#0A0A0A\", \"$type\": \"color\", \"$description\": \"Negro profundo de fondo\" },\n        \"surface\": { \"$value\": \"#1A1612\", \"$type\": \"color\", \"$description\": \"Superficies sobre el dark bg\" },\n        \"teal\":    { \"$value\": \"#1F4A52\", \"$type\": \"color\", \"$description\": \"Verde petróleo — luz ambiente del hero\" },\n        \"gold\":    { \"$value\": \"#D4B062\", \"$type\": \"color\", \"$description\": \"Dorado luminoso sobre dark\" }\n      },\n      \"semantic\": {\n        \"success\": { \"$value\": \"#6B8E5A\", \"$type\": \"color\" },\n        \"warning\": { \"$value\": \"#C4924A\", \"$type\": \"color\" },\n        \"danger\":  { \"$value\": \"#A0524A\", \"$type\": \"color\" },\n        \"info\":    { \"$value\": \"#4A6478\", \"$type\": \"color\" }\n      }\n    }\n  },\n\n  \"typography\": {\n    \"$description\": \"Pares tipográficos diferenciados. Ambos cargan desde Google Fonts.\",\n\n    \"portfolio\": {\n      \"fontFamily\": {\n        \"display\": { \"$value\": \"'Syne', sans-serif\", \"$type\": \"fontFamily\", \"$description\": \"Display geométrica con personalidad para titulares y números grandes\" },\n        \"body\":    { \"$value\": \"'Outfit', sans-serif\", \"$type\": \"fontFamily\", \"$description\": \"Sans humanista limpia para body y UI\" }\n      },\n      \"fontWeight\": {\n        \"light\":     { \"$value\": 300, \"$type\": \"fontWeight\" },\n        \"regular\":   { \"$value\": 400, \"$type\": \"fontWeight\" },\n        \"medium\":    { \"$value\": 500, \"$type\": \"fontWeight\" },\n        \"semibold\":  { \"$value\": 600, \"$type\": \"fontWeight\" },\n        \"bold\":      { \"$value\": 700, \"$type\": \"fontWeight\" },\n        \"extrabold\": { \"$value\": 800, \"$type\": \"fontWeight\" }\n      },\n      \"googleFontsUrl\": { \"$value\": \"https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Syne:wght@400;600;700;800&display=swap\", \"$type\": \"string\" }\n    },\n\n    \"talento-impulsa\": {\n      \"fontFamily\": {\n        \"display\":    { \"$value\": \"'Outfit', sans-serif\", \"$type\": \"fontFamily\", \"$description\": \"Sans geométrica moderna para titulares institucionales\" },\n        \"body\":       { \"$value\": \"'Outfit', sans-serif\", \"$type\": \"fontFamily\", \"$description\": \"Misma familia, distinto peso para mantener cohesión institucional\" },\n        \"decorative\": { \"$value\": \"'Cormorant Garamond', serif\", \"$type\": \"fontFamily\", \"$description\": \"Serif itálica decorativa para citas, frases-tesis y firmas conceptuales\" }\n      },\n      \"fontWeight\": {\n        \"light\":     { \"$value\": 300, \"$type\": \"fontWeight\" },\n        \"regular\":   { \"$value\": 400, \"$type\": \"fontWeight\" },\n        \"medium\":    { \"$value\": 500, \"$type\": \"fontWeight\" },\n        \"semibold\":  { \"$value\": 600, \"$type\": \"fontWeight\" },\n        \"bold\":      { \"$value\": 700, \"$type\": \"fontWeight\" }\n      },\n      \"googleFontsUrl\": { \"$value\": \"https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Outfit:wght@300;400;500;600;700&display=swap\", \"$type\": \"string\" }\n    },\n\n    \"scale\": {\n      \"$description\": \"Escala tipográfica modular compartida (modular scale 1.250 — major third). Aplica a ambas marcas.\",\n      \"xs\":   { \"$value\": \"0.75rem\",  \"$type\": \"dimension\", \"$description\": \"12px — captions, labels uppercase\" },\n      \"sm\":   { \"$value\": \"0.875rem\", \"$type\": \"dimension\", \"$description\": \"14px — body small, microcopy\" },\n      \"base\": { \"$value\": \"1rem\",     \"$type\": \"dimension\", \"$description\": \"16px — body default\" },\n      \"md\":   { \"$value\": \"1.125rem\", \"$type\": \"dimension\", \"$description\": \"18px — body intro, lead\" },\n      \"lg\":   { \"$value\": \"1.25rem\",  \"$type\": \"dimension\", \"$description\": \"20px — body grande\" },\n      \"xl\":   { \"$value\": \"1.5rem\",   \"$type\": \"dimension\", \"$description\": \"24px — h4\" },\n      \"2xl\":  { \"$value\": \"1.875rem\", \"$type\": \"dimension\", \"$description\": \"30px — h3\" },\n      \"3xl\":  { \"$value\": \"2.25rem\",  \"$type\": \"dimension\", \"$description\": \"36px — h2\" },\n      \"4xl\":  { \"$value\": \"3rem\",     \"$type\": \"dimension\", \"$description\": \"48px — h1\" },\n      \"5xl\":  { \"$value\": \"3.75rem\",  \"$type\": \"dimension\", \"$description\": \"60px — display\" },\n      \"6xl\":  { \"$value\": \"4.5rem\",   \"$type\": \"dimension\", \"$description\": \"72px — hero\" }\n    },\n\n    \"lineHeight\": {\n      \"tight\":   { \"$value\": 1.1,  \"$type\": \"number\", \"$description\": \"Para titulares grandes\" },\n      \"snug\":    { \"$value\": 1.3,  \"$type\": \"number\" },\n      \"normal\":  { \"$value\": 1.5,  \"$type\": \"number\" },\n      \"relaxed\": { \"$value\": 1.65, \"$type\": \"number\", \"$description\": \"Para body — mejora legibilidad en español\" },\n      \"loose\":   { \"$value\": 1.8,  \"$type\": \"number\" }\n    },\n\n    \"letterSpacing\": {\n      \"tighter\": { \"$value\": \"-0.04em\", \"$type\": \"string\", \"$description\": \"Headlines display grandes\" },\n      \"tight\":   { \"$value\": \"-0.02em\", \"$type\": \"string\" },\n      \"normal\":  { \"$value\": \"0\",       \"$type\": \"string\" },\n      \"wide\":    { \"$value\": \"0.05em\",  \"$type\": \"string\" },\n      \"widest\":  { \"$value\": \"0.18em\",  \"$type\": \"string\", \"$description\": \"Labels uppercase, mucha separación\" }\n    }\n  },\n\n  \"spacing\": {\n    \"$description\": \"Escala basada en múltiplos de 4px. Funciona igual en ambas marcas.\",\n    \"0\":  { \"$value\": \"0\",      \"$type\": \"dimension\" },\n    \"1\":  { \"$value\": \"0.25rem\",\"$type\": \"dimension\", \"$description\": \"4px\" },\n    \"2\":  { \"$value\": \"0.5rem\", \"$type\": \"dimension\", \"$description\": \"8px\" },\n    \"3\":  { \"$value\": \"0.75rem\",\"$type\": \"dimension\", \"$description\": \"12px\" },\n    \"4\":  { \"$value\": \"1rem\",   \"$type\": \"dimension\", \"$description\": \"16px\" },\n    \"5\":  { \"$value\": \"1.25rem\",\"$type\": \"dimension\", \"$description\": \"20px\" },\n    \"6\":  { \"$value\": \"1.5rem\", \"$type\": \"dimension\", \"$description\": \"24px\" },\n    \"8\":  { \"$value\": \"2rem\",   \"$type\": \"dimension\", \"$description\": \"32px\" },\n    \"10\": { \"$value\": \"2.5rem\", \"$type\": \"dimension\", \"$description\": \"40px\" },\n    \"12\": { \"$value\": \"3rem\",   \"$type\": \"dimension\", \"$description\": \"48px\" },\n    \"16\": { \"$value\": \"4rem\",   \"$type\": \"dimension\", \"$description\": \"64px\" },\n    \"20\": { \"$value\": \"5rem\",   \"$type\": \"dimension\", \"$description\": \"80px\" },\n    \"24\": { \"$value\": \"6rem\",   \"$type\": \"dimension\", \"$description\": \"96px — padding sección\" },\n    \"32\": { \"$value\": \"8rem\",   \"$type\": \"dimension\", \"$description\": \"128px\" }\n  },\n\n  \"radius\": {\n    \"$description\": \"Radios de borde. Portfolio usa 16px (orgánico cálido); Talento usa 4-8px (institucional).\",\n    \"none\": { \"$value\": \"0\",       \"$type\": \"dimension\" },\n    \"sm\":   { \"$value\": \"0.25rem\", \"$type\": \"dimension\", \"$description\": \"4px — institucional\" },\n    \"md\":   { \"$value\": \"0.5rem\",  \"$type\": \"dimension\", \"$description\": \"8px — institucional cards\" },\n    \"lg\":   { \"$value\": \"0.75rem\", \"$type\": \"dimension\", \"$description\": \"12px — botones inputs\" },\n    \"xl\":   { \"$value\": \"1rem\",    \"$type\": \"dimension\", \"$description\": \"16px — DEFAULT portfolio (--radius)\" },\n    \"2xl\":  { \"$value\": \"1.5rem\",  \"$type\": \"dimension\", \"$description\": \"24px — cards grandes portfolio\" },\n    \"pill\": { \"$value\": \"9999px\",  \"$type\": \"dimension\", \"$description\": \"Pastillas, badges, CTAs orgánicos\" }\n  },\n\n  \"shadow\": {\n    \"$description\": \"Sombras suaves. Las del portfolio usan tinte terracota; las institucionales son grises neutras.\",\n    \"portfolio\": {\n      \"sm\": { \"$value\": \"0 4px 16px rgba(196,144,124,0.12)\", \"$type\": \"shadow\", \"$description\": \"Hover sutil con tinte de marca\" },\n      \"md\": { \"$value\": \"0 8px 24px rgba(196,144,124,0.12)\", \"$type\": \"shadow\" },\n      \"lg\": { \"$value\": \"0 12px 32px rgba(196,144,124,0.15)\", \"$type\": \"shadow\" },\n      \"xl\": { \"$value\": \"0 24px 48px rgba(196,144,124,0.18)\", \"$type\": \"shadow\" }\n    },\n    \"talento-impulsa\": {\n      \"sm\": { \"$value\": \"0 2px 8px rgba(26,24,20,0.06)\",  \"$type\": \"shadow\" },\n      \"md\": { \"$value\": \"0 8px 20px rgba(26,24,20,0.08)\", \"$type\": \"shadow\" },\n      \"lg\": { \"$value\": \"0 16px 32px rgba(26,24,20,0.10)\",\"$type\": \"shadow\" },\n      \"xl\": { \"$value\": \"0 24px 48px rgba(26,24,20,0.14)\",\"$type\": \"shadow\" }\n    }\n  },\n\n  \"motion\": {\n    \"duration\": {\n      \"instant\": { \"$value\": \"100ms\", \"$type\": \"duration\" },\n      \"fast\":    { \"$value\": \"200ms\", \"$type\": \"duration\" },\n      \"base\":    { \"$value\": \"300ms\", \"$type\": \"duration\", \"$description\": \"Default para hover y micro-interacciones\" },\n      \"slow\":    { \"$value\": \"500ms\", \"$type\": \"duration\" },\n      \"slower\":  { \"$value\": \"800ms\", \"$type\": \"duration\", \"$description\": \"Reveals en scroll, fade-up del hero\" }\n    },\n    \"easing\": {\n      \"standard\":  { \"$value\": \"cubic-bezier(0.4, 0, 0.2, 1)\",   \"$type\": \"cubicBezier\" },\n      \"decelerate\":{ \"$value\": \"cubic-bezier(0, 0, 0.2, 1)\",     \"$type\": \"cubicBezier\" },\n      \"accelerate\":{ \"$value\": \"cubic-bezier(0.4, 0, 1, 1)\",     \"$type\": \"cubicBezier\" },\n      \"organic\":   { \"$value\": \"cubic-bezier(0.34, 1.56, 0.64, 1)\", \"$type\": \"cubicBezier\", \"$description\": \"Rebote sutil, sentido orgánico — para portfolio\" }\n    }\n  },\n\n  \"breakpoint\": {\n    \"sm\":  { \"$value\": \"640px\",  \"$type\": \"dimension\" },\n    \"md\":  { \"$value\": \"768px\",  \"$type\": \"dimension\", \"$description\": \"Mobile→desktop nav switch\" },\n    \"lg\":  { \"$value\": \"1024px\", \"$type\": \"dimension\" },\n    \"xl\":  { \"$value\": \"1280px\", \"$type\": \"dimension\" },\n    \"2xl\": { \"$value\": \"1536px\", \"$type\": \"dimension\" }\n  },\n\n  \"container\": {\n    \"maxWidth\": { \"$value\": \"1100px\", \"$type\": \"dimension\", \"$description\": \"Ancho máximo de contenido — confirmado en código actual\" }\n  }\n}\n", "tokens.css": "/* ============================================================\n   DESIGN SYSTEM — María Soledad Vila\n   v1.0.0 — 2026-05-02\n   ------------------------------------------------------------\n   Dos sub-marcas hermanas:\n     · Portfolio (Vibe Coder & Arquitecta Digital)\n     · Talento Impulsa Consulting (institucional)\n\n   USO:\n   1. Importar la fuente arriba del <head>\n   2. Aplicar [data-brand=\"portfolio\"] o [data-brand=\"talento\"]\n      en el <html> o <body>\n   3. Las variables se resuelven automáticamente\n   ============================================================ */\n\n/* --- FUENTES (cargar en index.html, no en CSS, para mejor perf) ---\n<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Outfit:wght@300;400;500;600;700;800&family=Syne:wght@400;600;700;800&display=swap\">\n*/\n\n/* ============================================================\n   TOKENS COMPARTIDOS (escala tipográfica, spacing, motion)\n   ============================================================ */\n:root {\n  /* Escala tipográfica — modular 1.250 */\n  --text-xs:   0.75rem;\n  --text-sm:   0.875rem;\n  --text-base: 1rem;\n  --text-md:   1.125rem;\n  --text-lg:   1.25rem;\n  --text-xl:   1.5rem;\n  --text-2xl:  1.875rem;\n  --text-3xl:  2.25rem;\n  --text-4xl:  3rem;\n  --text-5xl:  3.75rem;\n  --text-6xl:  4.5rem;\n\n  /* Pesos */\n  --weight-light:     300;\n  --weight-regular:   400;\n  --weight-medium:    500;\n  --weight-semibold:  600;\n  --weight-bold:      700;\n  --weight-extrabold: 800;\n\n  /* Line height */\n  --leading-tight:   1.1;\n  --leading-snug:    1.3;\n  --leading-normal:  1.5;\n  --leading-relaxed: 1.65;\n  --leading-loose:   1.8;\n\n  /* Letter spacing */\n  --tracking-tighter: -0.04em;\n  --tracking-tight:   -0.02em;\n  --tracking-normal:  0;\n  --tracking-wide:    0.05em;\n  --tracking-widest:  0.18em;\n\n  /* Spacing — múltiplos de 4px */\n  --space-0:  0;\n  --space-1:  0.25rem;\n  --space-2:  0.5rem;\n  --space-3:  0.75rem;\n  --space-4:  1rem;\n  --space-5:  1.25rem;\n  --space-6:  1.5rem;\n  --space-8:  2rem;\n  --space-10: 2.5rem;\n  --space-12: 3rem;\n  --space-16: 4rem;\n  --space-20: 5rem;\n  --space-24: 6rem;\n  --space-32: 8rem;\n\n  /* Radius */\n  --radius-none: 0;\n  --radius-sm:   0.25rem;\n  --radius-md:   0.5rem;\n  --radius-lg:   0.75rem;\n  --radius-xl:   1rem;\n  --radius-2xl:  1.5rem;\n  --radius-pill: 9999px;\n\n  /* Motion */\n  --duration-instant: 100ms;\n  --duration-fast:    200ms;\n  --duration-base:    300ms;\n  --duration-slow:    500ms;\n  --duration-slower:  800ms;\n\n  --ease-standard:   cubic-bezier(0.4, 0, 0.2, 1);\n  --ease-decelerate: cubic-bezier(0, 0, 0.2, 1);\n  --ease-accelerate: cubic-bezier(0.4, 0, 1, 1);\n  --ease-organic:    cubic-bezier(0.34, 1.56, 0.64, 1);\n\n  /* Container */\n  --container-max: 1100px;\n}\n\n/* ============================================================\n   SUB-MARCA: PORTFOLIO (Vibe Coder)\n   data-brand=\"portfolio\" — paleta cálida terracota\n   ============================================================ */\n[data-brand=\"portfolio\"] {\n  /* Brand */\n  --brand-primary:        #C4907C;\n  --brand-primary-soft:   #D4A797;\n  --brand-primary-deep:   #A87464;\n  --brand-glow:           rgba(196, 144, 124, 0.12);\n  --brand-glow-strong:    rgba(196, 144, 124, 0.22);\n\n  /* Neutros */\n  --bg:          #F5F2F0;\n  --bg-alt:      #EAE5E1;\n  --bg-card:     #FFFFFF;\n  --border:      #DDD7D2;\n  --border-light:#E8E3DF;\n  --text:        #2C2A2E;\n  --text-dim:    #7A7580;\n  --grey-dark:   #4A464F;\n  --grey-warm:   #B5B0AB;\n\n  /* Accent (paleta extendida del PDF) */\n  --accent-sage:     #ABB7A3;\n  --accent-lavender: #A48997;\n  --accent-navy:     #1E2A47;\n  --accent-sand:     #DAD2BB;\n\n  /* Semánticos */\n  --success: #7A9472;\n  --warning: #D4A04A;\n  --danger:  #B5604A;\n  --info:    #5A7090;\n\n  /* Tipografías */\n  --font-display: 'Syne', sans-serif;\n  --font-body:    'Outfit', sans-serif;\n\n  /* Sombras (tinte de marca) */\n  --shadow-sm: 0 4px 16px rgba(196, 144, 124, 0.12);\n  --shadow-md: 0 8px 24px rgba(196, 144, 124, 0.12);\n  --shadow-lg: 0 12px 32px rgba(196, 144, 124, 0.15);\n  --shadow-xl: 0 24px 48px rgba(196, 144, 124, 0.18);\n\n  /* Radius default */\n  --radius: var(--radius-xl);\n\n  /* Aplicar */\n  background: var(--bg);\n  color: var(--text);\n  font-family: var(--font-body);\n  font-weight: var(--weight-light);\n  line-height: var(--leading-relaxed);\n}\n\n/* ============================================================\n   SUB-MARCA: TALENTO IMPULSA (institucional)\n   data-brand=\"talento\" — paleta crema con dorado\n   ============================================================ */\n[data-brand=\"talento\"] {\n  /* Brand */\n  --brand-primary:      #9A7B3D;\n  --brand-primary-soft: #B8995A;\n  --brand-primary-deep: #75582A;\n\n  /* Neutros */\n  --bg:           #EFE9DB;\n  --bg-alt:       #DDD8D4;\n  --bg-warm:      #E3D7D2;\n  --bg-card:      #FFFFFF;\n  --border:       #C8C0B5;\n  --border-light: #DDD8D4;\n  --text:         #1A1814;\n  --text-dim:     #6E6859;\n\n  /* Earth scale (los 3+ niveles de la torre de servicios) */\n  --earth-tier-1: #E3D7D2;  /* Institucional — más claro */\n  --earth-tier-2: #BFABA2;  /* Equipo */\n  --earth-tier-3: #8C7D7A;\n  --earth-tier-4: #684B45;  /* Profesional — más oscuro */\n  --earth-tier-5: #3B3935;\n\n  /* Modo dark (para hero institucional dramático) */\n  --dark-bg:      #0A0A0A;\n  --dark-surface: #1A1612;\n  --dark-teal:    #1F4A52;\n  --dark-gold:    #D4B062;\n\n  /* Semánticos */\n  --success: #6B8E5A;\n  --warning: #C4924A;\n  --danger:  #A0524A;\n  --info:    #4A6478;\n\n  /* Tipografías */\n  --font-display:    'Outfit', sans-serif;\n  --font-body:       'Outfit', sans-serif;\n  --font-decorative: 'Cormorant Garamond', serif;\n\n  /* Sombras neutras */\n  --shadow-sm: 0 2px 8px rgba(26, 24, 20, 0.06);\n  --shadow-md: 0 8px 20px rgba(26, 24, 20, 0.08);\n  --shadow-lg: 0 16px 32px rgba(26, 24, 20, 0.10);\n  --shadow-xl: 0 24px 48px rgba(26, 24, 20, 0.14);\n\n  /* Radius default — más conservador */\n  --radius: var(--radius-md);\n\n  /* Aplicar */\n  background: var(--bg);\n  color: var(--text);\n  font-family: var(--font-body);\n  font-weight: var(--weight-regular);\n  line-height: var(--leading-relaxed);\n}\n\n/* ============================================================\n   PATRONES DE COMPONENTE — utilities listas para usar\n   ============================================================ */\n\n/* Headlines */\n.h-display {\n  font-family: var(--font-display);\n  font-size: var(--text-6xl);\n  font-weight: var(--weight-extrabold);\n  line-height: var(--leading-tight);\n  letter-spacing: var(--tracking-tighter);\n}\n.h-1 { font-family: var(--font-display); font-size: var(--text-5xl); font-weight: var(--weight-extrabold); line-height: var(--leading-tight); letter-spacing: var(--tracking-tighter); }\n.h-2 { font-family: var(--font-display); font-size: var(--text-3xl); font-weight: var(--weight-bold); line-height: var(--leading-snug); letter-spacing: var(--tracking-tight); }\n.h-3 { font-family: var(--font-display); font-size: var(--text-2xl); font-weight: var(--weight-semibold); line-height: var(--leading-snug); }\n.h-4 { font-family: var(--font-display); font-size: var(--text-xl);  font-weight: var(--weight-semibold); line-height: var(--leading-snug); }\n\n.label-eyebrow {\n  font-size: var(--text-xs);\n  font-weight: var(--weight-medium);\n  text-transform: uppercase;\n  letter-spacing: var(--tracking-widest);\n  color: var(--brand-primary-deep, var(--brand-primary));\n}\n\n/* Botón primario */\n.btn-primary {\n  display: inline-flex;\n  align-items: center;\n  gap: var(--space-2);\n  padding: var(--space-3) var(--space-8);\n  border-radius: var(--radius-pill);\n  background: var(--brand-primary-deep, var(--brand-primary));\n  color: #fff;\n  font-family: var(--font-body);\n  font-weight: var(--weight-medium);\n  font-size: var(--text-sm);\n  text-decoration: none;\n  border: none;\n  cursor: pointer;\n  transition: transform var(--duration-base) var(--ease-standard),\n              box-shadow var(--duration-base) var(--ease-standard);\n}\n.btn-primary:hover {\n  transform: translateY(-2px);\n  box-shadow: var(--shadow-md);\n}\n\n/* Botón secundario */\n.btn-secondary {\n  display: inline-flex;\n  align-items: center;\n  gap: var(--space-2);\n  padding: var(--space-3) var(--space-8);\n  border-radius: var(--radius-pill);\n  background: transparent;\n  color: var(--text);\n  border: 1px solid var(--border);\n  font-family: var(--font-body);\n  font-weight: var(--weight-medium);\n  font-size: var(--text-sm);\n  text-decoration: none;\n  cursor: pointer;\n  transition: transform var(--duration-base) var(--ease-standard),\n              box-shadow var(--duration-base) var(--ease-standard);\n}\n.btn-secondary:hover {\n  transform: translateY(-2px);\n  box-shadow: var(--shadow-sm);\n}\n\n/* Card base */\n.card {\n  background: var(--bg-card);\n  border: 1px solid var(--border-light);\n  border-radius: var(--radius);\n  padding: var(--space-8);\n  transition: transform var(--duration-base) var(--ease-standard),\n              border-color var(--duration-base) var(--ease-standard),\n              box-shadow var(--duration-base) var(--ease-standard);\n}\n.card:hover {\n  transform: translateY(-4px);\n  border-color: var(--brand-primary-soft, var(--brand-primary));\n  box-shadow: var(--shadow-md);\n}\n\n/* Badge / pill */\n.badge {\n  display: inline-block;\n  padding: var(--space-2) var(--space-6);\n  border-radius: var(--radius-pill);\n  background: var(--bg);\n  border: 1px solid var(--border);\n  font-size: var(--text-sm);\n  font-weight: var(--weight-medium);\n  color: var(--text);\n}\n\n/* Section padding default */\n.section {\n  padding: var(--space-24) var(--space-8);\n  max-width: var(--container-max);\n  margin: 0 auto;\n}\n\n/* Reveal on scroll (animación standard del portfolio) */\n.reveal {\n  opacity: 0;\n  transform: translateY(30px);\n  transition: opacity var(--duration-slower) var(--ease-decelerate),\n              transform var(--duration-slower) var(--ease-decelerate);\n}\n.reveal.visible {\n  opacity: 1;\n  transform: translateY(0);\n}\n", "tailwind.config.js": "/** @type {import('tailwindcss').Config} */\n// ============================================================\n// DESIGN SYSTEM — María Soledad Vila\n// Configuración Tailwind con ambas sub-marcas como variantes\n// ============================================================\n//\n// USO:\n//   1. Pegar este archivo como tailwind.config.js\n//   2. En tu HTML/JSX, aplicar data-brand=\"portfolio\" o\n//      data-brand=\"talento\" en <html> o <body>\n//   3. Las clases bg-brand, text-brand, etc. se resuelven solas\n//   4. Para clases específicas: bg-portfolio-primary, bg-talento-earth-tier1\n//\n// EJEMPLO:\n//   <body data-brand=\"portfolio\">\n//     <button class=\"bg-brand text-white rounded-pill\">CTA</button>\n//   </body>\n// ============================================================\n\nmodule.exports = {\n  content: [\"./index.html\", \"./src/**/*.{js,jsx,ts,tsx,html}\"],\n  theme: {\n    extend: {\n      colors: {\n        // === Aliases dinámicos (resuelven via CSS vars según data-brand) ===\n        brand: {\n          DEFAULT: \"var(--brand-primary)\",\n          soft:    \"var(--brand-primary-soft)\",\n          deep:    \"var(--brand-primary-deep)\",\n        },\n        bg: {\n          DEFAULT: \"var(--bg)\",\n          alt:     \"var(--bg-alt)\",\n          card:    \"var(--bg-card)\",\n        },\n        ink: {\n          DEFAULT: \"var(--text)\",\n          dim:     \"var(--text-dim)\",\n        },\n\n        // === Portfolio (valores hard-coded) ===\n        portfolio: {\n          primary:      \"#C4907C\",\n          \"primary-soft\": \"#D4A797\",\n          \"primary-deep\": \"#A87464\",\n          bg:           \"#F5F2F0\",\n          \"bg-alt\":     \"#EAE5E1\",\n          text:         \"#2C2A2E\",\n          \"text-dim\":   \"#7A7580\",\n          border:       \"#DDD7D2\",\n          \"accent-sage\":     \"#ABB7A3\",\n          \"accent-lavender\": \"#A48997\",\n          \"accent-navy\":     \"#1E2A47\",\n          \"accent-sand\":     \"#DAD2BB\",\n        },\n\n        // === Talento Impulsa (valores hard-coded) ===\n        talento: {\n          primary:      \"#9A7B3D\",\n          \"primary-soft\": \"#B8995A\",\n          \"primary-deep\": \"#75582A\",\n          \"bg-cream\":   \"#EFE9DB\",\n          \"bg-stone\":   \"#DDD8D4\",\n          \"bg-warm\":    \"#E3D7D2\",\n          text:         \"#1A1814\",\n          \"text-dim\":   \"#6E6859\",\n          \"earth-tier1\": \"#E3D7D2\",\n          \"earth-tier2\": \"#BFABA2\",\n          \"earth-tier3\": \"#8C7D7A\",\n          \"earth-tier4\": \"#684B45\",\n          \"earth-tier5\": \"#3B3935\",\n          \"dark-bg\":    \"#0A0A0A\",\n          \"dark-teal\":  \"#1F4A52\",\n          \"dark-gold\":  \"#D4B062\",\n        },\n      },\n\n      fontFamily: {\n        display:    [\"Syne\", \"sans-serif\"],     // portfolio default\n        body:       [\"Outfit\", \"sans-serif\"],   // ambas marcas\n        decorative: [\"Cormorant Garamond\", \"serif\"], // talento\n      },\n\n      fontSize: {\n        xs:   [\"0.75rem\",  { lineHeight: \"1.5\" }],\n        sm:   [\"0.875rem\", { lineHeight: \"1.5\" }],\n        base: [\"1rem\",     { lineHeight: \"1.65\" }],\n        md:   [\"1.125rem\", { lineHeight: \"1.65\" }],\n        lg:   [\"1.25rem\",  { lineHeight: \"1.5\" }],\n        xl:   [\"1.5rem\",   { lineHeight: \"1.3\" }],\n        \"2xl\":[\"1.875rem\", { lineHeight: \"1.3\" }],\n        \"3xl\":[\"2.25rem\",  { lineHeight: \"1.2\" }],\n        \"4xl\":[\"3rem\",     { lineHeight: \"1.1\" }],\n        \"5xl\":[\"3.75rem\",  { lineHeight: \"1.1\", letterSpacing: \"-0.02em\" }],\n        \"6xl\":[\"4.5rem\",   { lineHeight: \"1.08\", letterSpacing: \"-0.04em\" }],\n      },\n\n      letterSpacing: {\n        tighter: \"-0.04em\",\n        tight:   \"-0.02em\",\n        wide:    \"0.05em\",\n        widest:  \"0.18em\",\n      },\n\n      borderRadius: {\n        none: \"0\",\n        sm:   \"0.25rem\",\n        md:   \"0.5rem\",\n        lg:   \"0.75rem\",\n        xl:   \"1rem\",\n        \"2xl\":\"1.5rem\",\n        pill: \"9999px\",\n      },\n\n      boxShadow: {\n        // Portfolio (tinte terracota)\n        \"portfolio-sm\": \"0 4px 16px rgba(196,144,124,0.12)\",\n        \"portfolio-md\": \"0 8px 24px rgba(196,144,124,0.12)\",\n        \"portfolio-lg\": \"0 12px 32px rgba(196,144,124,0.15)\",\n        \"portfolio-xl\": \"0 24px 48px rgba(196,144,124,0.18)\",\n        // Talento (gris neutro)\n        \"talento-sm\":   \"0 2px 8px rgba(26,24,20,0.06)\",\n        \"talento-md\":   \"0 8px 20px rgba(26,24,20,0.08)\",\n        \"talento-lg\":   \"0 16px 32px rgba(26,24,20,0.10)\",\n        \"talento-xl\":   \"0 24px 48px rgba(26,24,20,0.14)\",\n      },\n\n      transitionTimingFunction: {\n        organic: \"cubic-bezier(0.34, 1.56, 0.64, 1)\",\n      },\n\n      maxWidth: {\n        container: \"1100px\",\n      },\n\n      keyframes: {\n        fadeUp: {\n          \"0%\":   { opacity: \"0\", transform: \"translateY(24px)\" },\n          \"100%\": { opacity: \"1\", transform: \"translateY(0)\" },\n        },\n        pulse: {\n          \"0%, 100%\": { opacity: \"0.4\", transform: \"scale(1)\" },\n          \"50%\":      { opacity: \"0.7\", transform: \"scale(1.08)\" },\n        },\n      },\n\n      animation: {\n        \"fade-up\": \"fadeUp 0.8s ease-out forwards\",\n        \"pulse-soft\": \"pulse 7s ease-in-out infinite\",\n      },\n    },\n  },\n  plugins: [],\n};\n", "prompts-para-ia.md": "# Prompts listos para IAs\n\n> **Cómo usar este archivo:** Cada bloque de abajo está pensado para copiarse y pegarse en un prompt. La idea es que tu design system viaje contigo cuando construís en v0.dev, Lovable, Bolt, Cursor o conversaciones nuevas con Claude.\n>\n> **Regla de oro:** siempre pegá primero el bloque \"Identidad de marca\" correspondiente, después tu pedido específico. Eso evita que la IA invente colores o tipografías.\n\n---\n\n## 📦 BLOQUE 1 — Identidad de marca · PORTFOLIO (Vibe Coder)\n\n> Pegar al inicio de cualquier prompt cuando trabajes en algo del portfolio personal.\n\n```\nTrabajo bajo el design system \"Portfolio María Soledad Vila — Vibe Coder & Arquitecta Digital\".\n\nPALETA (usar exactos, no improvisar):\n- Marca primaria: #C4907C (terracota)\n- Marca suave:   #D4A797 (terracota clara, hover/gradientes)\n- Marca profunda: #A87464 (botones presionados, énfasis)\n- Fondo principal: #F5F2F0 (beige cálido)\n- Fondo alterno:   #EAE5E1\n- Card / superficie elevada: #FFFFFF\n- Borde: #DDD7D2\n- Texto principal: #2C2A2E (no negro puro, casi negro cálido)\n- Texto secundario: #7A7580\n- Acentos extendidos (usar con moderación): #ABB7A3 sage, #A48997 lavender, #1E2A47 navy, #DAD2BB sand\n\nTIPOGRAFÍA:\n- Display (titulares): 'Syne', sans-serif — pesos 700/800\n- Body (cuerpo + UI): 'Outfit', sans-serif — pesos 300/400/500/600\n- Cargar: https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Syne:wght@400;600;700;800&display=swap\n\nPERSONALIDAD VISUAL:\n- Cálida, artesanal, humana — NO corporate-tech\n- Bordes redondeados generosos: 16px default (--radius), 24px en cards grandes, pill (9999px) en botones\n- Sombras con tinte terracota, no grises: 0 8px 24px rgba(196,144,124,0.12)\n- Animaciones suaves con fade-up y blobs radiales pulsando como halos de marca\n- Layout: max-width 1100px, padding generoso (96px sección desktop, 64px mobile)\n- Tono editorial, no dashboard. Usa generous negative space.\n\nEVITAR ABSOLUTAMENTE:\n- Inter, Roboto, Arial, system fonts\n- Gradientes purple-on-white (cliché AI)\n- Bordes 4px o 8px (institucional, no corresponde)\n- Azul corporate, verde fluo, amarillo vibrante\n- Layouts simétricos rígidos: preferir asimetría cálida\n```\n\n---\n\n## 📦 BLOQUE 2 — Identidad de marca · TALENTO IMPULSA (institucional)\n\n> Pegar al inicio de cualquier prompt cuando trabajes en algo de Talento Impulsa Consulting.\n\n```\nTrabajo bajo el design system \"Talento Impulsa Consulting — Productividad Consciente Aumentada (PCA™)\".\n\nPALETA (usar exactos):\n- Marca primaria: #9A7B3D (dorado mostaza, para titulares decorativos)\n- Marca suave:   #B8995A\n- Marca profunda: #75582A\n- Fondo crema:  #EFE9DB (principal)\n- Fondo piedra: #DDD8D4 (secundario)\n- Fondo cálido: #E3D7D2 (bloques editoriales)\n- Card: #FFFFFF\n- Borde: #C8C0B5\n- Texto: #1A1814 (negro cálido institucional)\n- Texto secundario: #6E6859\n\nESCALA TIERRA (para tarjetas de niveles, tags, jerarquías):\n- Tier 1 (más claro, premium): #E3D7D2\n- Tier 2: #BFABA2\n- Tier 3: #8C7D7A\n- Tier 4 (más oscuro, base): #684B45\n- Tier 5 (carbón, contraste): #3B3935\n\nMODO DARK (solo para portadas dramáticas tipo hero):\n- Fondo: #0A0A0A (negro profundo)\n- Superficie: #1A1612\n- Acento luz: #1F4A52 (verde petróleo)\n- Acento dorado luminoso: #D4B062\n\nTIPOGRAFÍA:\n- Display + body: 'Outfit', sans-serif (cohesión institucional, una sola familia, pesos diferenciados)\n- Decorativa cursiva (citas, frases-tesis, firma): 'Cormorant Garamond', serif italic\n- Cargar: https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Outfit:wght@300;400;500;600;700&display=swap\n\nPERSONALIDAD VISUAL:\n- Institucional pero NO frío. Cálido y autoritativo.\n- Bordes conservadores: 4-8px en cards, 12px en botones, pill solo en CTAs principales\n- Sombras grises neutras y suaves: 0 8px 20px rgba(26,24,20,0.08)\n- Tono editorial / documento de tesis: mucho aire, jerarquías claras, citas en cursiva\n- Aprovechar contrast dark→light: hero dramático, cuerpo cálido y claro\n\nEVITAR:\n- Azul corporativo o navy puro como dominante (no es la marca)\n- Sombras coloreadas (eso es portfolio, no acá)\n- Gradientes saturados\n- Múltiples acentos simultáneos: dorado mostaza es el ÚNICO color de marca\n\nCONCEPTO CENTRAL: \"No enseñamos herramientas. Diseñamos estructuras.\" Modelo PCA™ = Sistema + Delegación Inteligente + Liderazgo Consciente.\n```\n\n---\n\n## 🛠️ PROMPTS POR CASO DE USO\n\n### Landing page nueva (Portfolio)\n\n```\n[Pegar BLOQUE 1 arriba]\n\nConstruime una landing page de una sola página para promocionar [PRODUCTO X].\n\nEstructura:\n1. Hero con tag pequeño en uppercase (--tracking-widest), titular display Syne con la palabra clave en gradiente terracota, subtítulo Outfit, dos stats grandes con números display\n2. Sección \"sobre\" en grid 2 columnas (titular display + lista de servicios con dots terracota)\n3. Sección de cards 3 columnas con icono emoji en bg pill terracota, titular Syne, body Outfit\n4. CTA final centered con botón pill terracota + botón secundario con borde\n\nAnimaciones: fade-up escalonado en hero (delays 0.2s/0.4s/0.6s/0.8s), reveal on scroll para resto de secciones, blob radial pulsando suave detrás del hero.\n\nMobile-first. Single HTML file, sin frameworks externos.\n```\n\n### Sección de producto / case study (Portfolio)\n\n```\n[Pegar BLOQUE 1]\n\nDiseñá una sección \"Producto en acción\" con grid de 2 columnas:\n- Card izquierda: video preview 16:9 con autoplay on hover (muted/loop/playsinline), fallback placeholder\n- Card derecha: label uppercase terracota (.label-eyebrow), titular Syne, descripción Outfit, lista de features con checks\n\nSombra .shadow-md de portfolio en hover. Border-radius 16px en cards. Las cards \"elevan\" en hover (translateY(-4px)).\n```\n\n### Pitch deck slide (Talento Impulsa)\n\n```\n[Pegar BLOQUE 2]\n\nDiseñá una slide HTML 16:9 (1920x1080) para una presentación con esta estructura:\n- Background crema #EFE9DB\n- Esquina superior izquierda: marca \"TALENTO IMPULSA\" en Outfit semibold pequeño + \"Consulting\" en Cormorant italic debajo\n- Centro: titular Outfit 60px bold \"Modelo PCA™\"\n- Bajo titular: 3 columnas con iconos de columnas griegas, bajo cada columna nombre del pilar en Outfit uppercase con tracking-widest, descripción corta debajo\n- Footer izquierdo: cita en Cormorant italic dorado mostaza #9A7B3D\n\nLa estética debe ser editorial-tesis, NO startup-pitch.\n```\n\n### Componente: Card de servicio (Talento Impulsa)\n\n```\n[Pegar BLOQUE 2]\n\nCreame un componente React de \"Card de Servicio Tier\" que reciba props {tier, title, description}.\n\nTier 1, 2, 3, 4 mapean a colores --earth-tier-1 hasta --earth-tier-4.\nBackground del card = color del tier.\nTexto siempre legible: tier 1-2 → texto #1A1814, tier 3-4 → texto blanco.\nBorder-radius 8px. Padding 32px. Sombra .shadow-talento-md en hover.\nTitular en Outfit bold 24px. Descripción Outfit regular 16px line-height 1.65.\n```\n\n### Botón CTA (cualquiera)\n\n```\n[Pegar el bloque que corresponda]\n\nBotón primario:\n- Background: var(--brand-primary-deep)\n- Color: white\n- Padding: 14px 32px\n- Border-radius: 9999px (pill)\n- Font: Outfit 14px medium\n- Hover: translateY(-2px), shadow-md de la marca\n- Transition 300ms cubic-bezier(0.4, 0, 0.2, 1)\n```\n\n### Dashboard interno / app web (Portfolio + IA)\n\n```\n[Pegar BLOQUE 1]\n\nConstruime un dashboard interno para [USO]. Es una app de productividad con IA integrada nativa.\n\nLayout:\n- Sidebar 240px izquierda (bg-card blanco, border derecho, items con icono lucide + label Outfit)\n- Header sticky (bg con backdrop-blur, breadcrumb left, search center, avatar right)\n- Main: cards con datos, charts con paleta sage/lavender/sand del accent (no neón)\n\nUsá React + Tailwind. Importá los tokens del tailwind.config.js como [data-brand=\"portfolio\"].\n\nFilosofía PCA™ aplicada: la IA propone, el humano confirma. Cada acción automatizada debe tener un botón \"revisar\" antes de ejecutar.\n```\n\n---\n\n## 🎯 PROMPT MAESTRO (todo el sistema en uno solo)\n\n> Pegar este prompt cuando arranques una sesión nueva con Claude/Cursor/Cody y querés que entiendan TODO el sistema sin tener que ir bloque por bloque.\n\n```\nSos mi asistente de diseño y desarrollo. Trabajo bajo dos sub-marcas hermanas con un design system unificado:\n\n═══ SUB-MARCA A: PORTFOLIO (Vibe Coder & Arquitecta Digital) ═══\nColor marca: #C4907C terracota (soft #D4A797, deep #A87464)\nFondo: #F5F2F0 beige cálido | Card: blanco | Borde: #DDD7D2\nTexto: #2C2A2E (text-dim #7A7580)\nAcentos: #ABB7A3 sage / #A48997 lavender / #1E2A47 navy / #DAD2BB sand\nTipo: Syne display + Outfit body\nRadius default: 16px | Sombras con tinte terracota\nPersonalidad: cálida, artesanal, humana, editorial\n\n═══ SUB-MARCA B: TALENTO IMPULSA CONSULTING (institucional) ═══\nColor marca: #9A7B3D dorado mostaza (soft #B8995A, deep #75582A)\nFondo: #EFE9DB crema | Stone: #DDD8D4 | Card: blanco\nTexto: #1A1814 (text-dim #6E6859)\nEscala tierra (5 niveles): #E3D7D2 → #BFABA2 → #8C7D7A → #684B45 → #3B3935\nModo dark hero: bg #0A0A0A, teal #1F4A52, gold #D4B062\nTipo: Outfit (display+body) + Cormorant Garamond italic (decorativa)\nRadius default: 8px | Sombras grises neutras\nPersonalidad: institucional cálida, autoridad, tono de tesis\n\n═══ TOKENS COMPARTIDOS ═══\nSpacing: múltiplos de 4 (1rem=16px base)\nEscala tipo: xs/sm/base/md/lg/xl/2xl(30)/3xl(36)/4xl(48)/5xl(60)/6xl(72)\nContainer max: 1100px\nMotion: 200ms fast / 300ms base / 800ms reveals\nEasing: cubic-bezier(0.4,0,0.2,1) standard, cubic-bezier(0.34,1.56,0.64,1) organic\n\n═══ REGLAS ═══\n- Siempre que algo sea \"para mi portfolio personal\" o mencione \"Vibe Coder\" → SUB-MARCA A\n- Siempre que sea \"para Talento Impulsa\", \"PCA\", \"consultoría\" → SUB-MARCA B\n- Nunca uses Inter, Roboto, Arial. Nunca purple gradients. Nunca azul corporativo.\n- Default a paleta cálida; los acentos se usan con moderación.\n- Argentina ES, idioma rioplatense (\"vos\" no \"tú\", \"querés\" no \"quieres\").\n- Primero preguntame qué sub-marca antes de elegir paleta si no lo aclaro.\n\n¿Para qué sub-marca trabajamos hoy?\n```\n\n---\n\n## 🧪 Mini-promtps de utilidad\n\n### Generar variaciones de color con la paleta\n\n```\nNecesito 5 colores que armonicen con [HEX X] dentro de mi design system de portfolio (paleta cálida #C4907C/#F5F2F0/#7A7580). Devolvé HEX y caso de uso sugerido.\n```\n\n### Verificar contraste WCAG\n\n```\nVerificá contraste WCAG AA y AAA para body 16px y headings 24px+ entre estos pares:\n- #2C2A2E sobre #F5F2F0 (portfolio body sobre bg)\n- #FFFFFF sobre #C4907C (portfolio CTA)\n- #1A1814 sobre #EFE9DB (talento body sobre bg)\n- #FFFFFF sobre #9A7B3D (talento CTA)\n- #FFFFFF sobre #684B45 (talento earth tier 4)\nDevolvé ratio numérico y pass/fail.\n```\n\n### Adaptar componente entre marcas\n\n```\nTomá este componente diseñado para [SUB-MARCA A] y adaptalo a [SUB-MARCA B] manteniendo estructura pero cambiando paleta, tipografía, radius y sombra. NO cambies el HTML semántico ni los breakpoints.\n\n[Pegar componente]\n```\n"};
+
+  function downloadFile(name) {
+    const content = FILES[name];
+    if (!content) { alert('Archivo no disponible — descargalo del paquete entregado.'); return; }
+    const blob = new Blob([content], { type: name.endsWith('.json') ? 'application/json' : 'text/plain;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+
+  // side-nav active state on scroll
+  const navLinks = document.querySelectorAll('.side-nav a');
+  const sections = document.querySelectorAll('main section');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const id = e.target.id;
+        navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + id));
+      }
+    });
+  }, { rootMargin: '-100px 0px -60% 0px' });
+  sections.forEach(s => observer.observe(s));
+
+  // init
+  applyBrand('portfolio');
+</script>
+
+</body>
+</html>
