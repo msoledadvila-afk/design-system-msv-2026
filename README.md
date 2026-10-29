@@ -107,7 +107,7 @@ Para ver el showroom como sitio web público navegable:
 
 En 1-2 minutos vas a tener:
 ```
-https://msoledadvila-afk.github.io/design-system/
+https://msoledadvila-afk.github.io/design-system-msv-2026/
 ```
 
 ---
@@ -115,7 +115,8 @@ https://msoledadvila-afk.github.io/design-system/
 ## 📐 Estructura técnica
 
 ```
-design-system/
+design-system-msv-2026/
+├── index.html              # Portada
 ├── design-system.html      # Showroom navegable
 ├── tokens.json             # W3C Design Tokens
 ├── tokens.css              # Variables CSS
@@ -147,12 +148,12 @@ design-system/
 
 ## 👤 Sobre
 
-**María Soledad Vila** — Vibe Coder & Arquitecta Digital · Fundadora de [Talento Impulsa Consulting](https://github.com/msoledadvila-afk).
+**María Soledad Vila** — Vibe Coder & Arquitecta Digital · Fundadora de [Talento Impulsa Consulting](https://talentoimpulsa.com.ar).
 
 Construyo aplicaciones web que integran IA de forma nativa, devolviendo el control a cada organización.
 
-- 💬 WhatsApp: +54 9 11 6958-0303
-- ✉️ Email: msoledadvila@gmail.com
+- 🌐 [mariasoledadvila.com.ar](https://mariasoledadvila.com.ar) · hola@mariasoledadvila.com.ar
+- 🌐 [talentoimpulsa.com.ar](https://talentoimpulsa.com.ar) · hola@talentoimpulsa.com.ar
 
 ---
 
